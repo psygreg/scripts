@@ -1,0 +1,18 @@
+#!/bin/bash
+# name: Sober
+# version: 1.0
+# description: sober_desc
+# icon: sober.png
+# repo: https://sober.vinegarhq.org
+
+# --- Start of the script code ---
+#SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
+# language
+_lang_
+source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
+source "$SCRIPT_DIR/libs/helpers.lib"
+_flatpaks=(
+    org.vinegarhq.Sober
+)
+_flatpak_

@@ -1,0 +1,16 @@
+#!/bin/bash
+# name: Telegram
+# version: 1.0
+# description: telegram_desc
+# icon: telegram.png
+# repo: https://desktop.telegram.org/
+
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
+_lang_
+source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
+source "$SCRIPT_DIR/libs/helpers.lib"
+_flatpaks=(
+    org.telegram.desktop
+)
+_flatpak_
+
