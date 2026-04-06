@@ -8,7 +8,7 @@
 # nocontainer
 
 # --- Start of the script code ---
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
+source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
 sudo_rq
 if is_fedora || is_ostree; then

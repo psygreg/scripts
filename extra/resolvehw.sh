@@ -7,7 +7,7 @@
 # compat: ubuntu, debian, fedora, arch, cachy
 
 # --- Start of the script code --- ## TODO for DaVinciBox
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
+source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
 # Install build dependencies
 if is_fedora || is_ostree; then
