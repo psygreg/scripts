@@ -4,12 +4,11 @@
 # description: kconnect_desc
 # icon: kconnect.svg
 # compat: !ubuntu, !zorin, !solus
+# revert: no
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
-# language
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 sudo_rq
 
 # KDE Connect port range

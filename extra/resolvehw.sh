@@ -9,36 +9,27 @@
 # --- Start of the script code --- ## TODO for DaVinciBox
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
-# detect GPU if Intel
-if lspci | grep -E "VGA|3D" | grep -i "Intel" > /dev/null; then
-    GPU="Intel"
-fi
-
 # Install build dependencies
 if is_fedora || is_ostree; then
     rpmfusion_chk
-    _packages=(cmake gcc-c++ ffmpeg-devel git make)
-    if [ "$GPU" = "Intel" ]; then
-        _packages+=(intel-media-driver intel-vpl-gpu-rt)
+    pkg_install cmake gcc-c++ ffmpeg-devel git make
+    if is_intel; then
+        pkg_install intel-media-driver intel-vpl-gpu-rt
     fi
-    _install_
 elif is_ubuntu || is_debian; then
-    _packages=(build-essential cmake libavcodec-dev libavformat-dev libavutil-dev libswscale-dev git make)
-    if [ "$GPU" = "Intel" ]; then
-        _packages+=(intel-media-driver)
+    pkg_install build-essential cmake libavcodec-dev libavformat-dev libavutil-dev libswscale-dev git make
+    if is_intel; then
+        pkg_install intel-media-driver
     fi
-    _install_
 elif is_arch || is_cachy; then
-    _packages=(cmake ffmpeg git make base-devel)
-    if [ "$GPU" = "Intel" ]; then
-        _packages+=(intel-media-driver vpl-gpu-rt)
+    pkg_install cmake ffmpeg git make base-devel
+    if is_intel; then
+        pkg_install intel-media-driver vpl-gpu-rt
     fi
-    _install_
 fi
 
 # Clone and build
-cd $HOME
+prep_tmp
 if [ -d "ffmpeg_encoder_plugin" ]; then
     rm -rf ffmpeg_encoder_plugin
 fi
@@ -51,12 +42,9 @@ make
 
 # Install
 # Directory structure for Linux-x86-64
+prep_dir "/opt/resolve/IOPlugins/ffmpeg_encoder_plugin.dvcp.bundle/Contents/Linux-x86-64"
 PLUGIN_DIR="/opt/resolve/IOPlugins/ffmpeg_encoder_plugin.dvcp.bundle/Contents/Linux-x86-64"
 sudo_rq
-sudo mkdir -p "$PLUGIN_DIR"
 sudo cp ffmpeg_encoder_plugin.dvcp "$PLUGIN_DIR/"
 
-# Cleanup
-cd $HOME
-rm -rf ffmpeg_encoder_plugin
 zeninf "DaVinci Resolve FFmpeg Plugin installed successfully!"

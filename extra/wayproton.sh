@@ -5,7 +5,6 @@
 # icon: proton.svg
 
 # --- Start of the script code ---
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
 source "$SCRIPT_DIR/libs/optimizers.lib"
 sudo_rq
 wayland_proton_lib
