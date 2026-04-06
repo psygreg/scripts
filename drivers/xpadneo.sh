@@ -9,11 +9,8 @@
 # repo: https://github.com/atar-axis/xpadneo
 
 # --- Start of the script code ---
-#SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
-# language
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 sudo_rq
 if [[ "$ID_LIKE" == *debian* ]] || [[ "$ID_LIKE" == *ubuntu* ]] || [ "$ID" == "debian" ] || [ "$ID" == "ubuntu" ]; then
     _packages=(dkms linux-headers-$(uname -r))
@@ -25,10 +22,8 @@ elif [[ "$ID" =~ "suse" ]] || [[ "$ID_LIKE" =~ *suse* ]]; then
     _packages=(dkms make bluez kernel-devel kernel-source)
 fi
 _install_
-cd $HOME
+prep_tmp
 git clone https://github.com/atar-axis/xpadneo.git
 cd xpadneo
 sudo ./install.sh
-cd ..
-rm -r xpadneo
 zeninf "$msg036"

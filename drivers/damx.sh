@@ -8,10 +8,8 @@
 # repo: https://github.com/PXDiv/Div-Acer-Manager-Max
 
 # --- Start of the script code ---
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
 source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 
 _gh_user="PXDiv"
 _gh_repo="Div-Acer-Manager-Max"

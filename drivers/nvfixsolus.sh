@@ -9,10 +9,8 @@
 # gpu: Nvidia
 # new
 
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
 source "$SCRIPT_DIR/libs/optimizers.lib"
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 sudo_rq
 nvidia_solus_lib
 zeninf "$rebootmsg"

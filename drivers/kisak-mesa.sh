@@ -4,12 +4,11 @@
 # icon: kisak.svg
 # compat: ubuntu
 # nocontainer
+# revert: no
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
-# language
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 sudo_rq
 sudo add-apt-repository ppa:kisak/kisak-mesa -y
 sudo apt update
