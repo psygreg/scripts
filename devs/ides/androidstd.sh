@@ -6,10 +6,7 @@
 # repo: https://developer.android.com/studio/
 
 # --- Start of the script code ---
-source "$SCRIPT_DIR/libs/helpers.lib"
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_flatpaks=(
-    com.google.AndroidStudio
-)
-_flatpak_
+pkg_flat com.google.AndroidStudio
 zeninf "$msg018"

@@ -13,8 +13,7 @@ _lang_
 [ -f $HOME/.config/nvim-Lazyman/lazyman.sh ] && { zeninf "${msg281}"; exit 0; }
 
 sudo_rq
-_packages=(neovim git)
-_install_
+pkg_install neovim
 prep_dir "$HOME/.config/nvim-Lazyman"
 git clone --depth=1 https://github.com/doctorfree/nvim-lazyman $HOME/.config/nvim-Lazyman
 $HOME/.config/nvim-Lazyman/lazyman.sh -z && {

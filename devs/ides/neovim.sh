@@ -8,7 +8,6 @@
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_packages=(neovim)
 sudo_rq
-_install_
+pkg_install neovim
 zeninf "$msg018"
