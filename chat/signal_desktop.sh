@@ -5,9 +5,6 @@
 # icon: signal.png
 # repo: https://signal.org/
 
-source "$SCRIPT_DIR/libs/helpers.lib"
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_flatpaks=(
-    org.signal.Signal
-)
-_flatpak_
+pkg_flat org.signal.Signal

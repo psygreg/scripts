@@ -6,9 +6,6 @@
 # repo: https://slack.com
 
 # --- Start of the script code ---
-source "$SCRIPT_DIR/libs/helpers.lib"
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_flatpaks=(
-    com.slack.Slack
-)
-_flatpak_
+pkg_flat com.slack.Slack

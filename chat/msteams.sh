@@ -6,9 +6,6 @@
 # repo: https://github.com/IsmaelMartinez/teams-for-linux
 
 # --- Start of the script code ---
-source "$SCRIPT_DIR/libs/helpers.lib"
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_flatpaks=(
-    com.github.IsmaelMartinez.teams_for_linux
-)
-_flatpak_
+pkg_flat com.github.IsmaelMartinez.teams_for_linux

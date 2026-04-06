@@ -5,10 +5,7 @@
 # icon: zapzap.png
 # repo: https://github.com/rafatosta/zapzap
 
-source "$SCRIPT_DIR/libs/helpers.lib"
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_flatpaks=(
-    com.rtosta.zapzap
-)
-_flatpak_
+pkg_flat com.rtosta.zapzap
 

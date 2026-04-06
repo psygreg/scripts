@@ -6,9 +6,6 @@
 # repo: https://discord.com
 
 # --- Start of the script code ---
-source "$SCRIPT_DIR/libs/helpers.lib"
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_flatpaks=(
-    com.discordapp.Discord
-)
-_flatpak_
+pkg_flat com.discordapp.Discord

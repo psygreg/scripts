@@ -18,6 +18,6 @@ _install_
 prep_edit "$HOME/.zshrc"
 (
 	sh -c "$(curl -fsSL https://install.ohmyz.sh/) --unattended" && {
-		sudo chsh -s "$(type -p zsh)" "$USER";	
+		shell_change "$(type -p zsh)" "$USER";	
 	}
 ) && { zeninf "$msg018"; } || { fatal "Unable to complete installation"; }
