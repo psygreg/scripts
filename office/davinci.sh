@@ -86,34 +86,33 @@ getresolve () {
 
 davincinatd () {
     # opencl check for AMD/Intel GPUs
-    GPUCHK=$(lspci | grep -Ei '(radeon|rx|battlemage|alchemist|iris)')
-    if [[ -n "$GPUCHK" ]]; then
+    if is_intel || is_amd; then
         if ! clinfo_chk; then
             fatal "$nocl"
         fi
     fi
-    if [[ "$ID_LIKE" == *debian* ]] || [[ "$ID_LIKE" == *ubuntu* ]] || [ "$ID" == "debian" ] || [ "$ID" == "ubuntu" ]; then
+    if is_debian || is_ubuntu; then
         fetch_from_mirror "autoresolvedeb.sh" \
             "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolvedeb.sh" \
             "https://git.linux.toys/psygreg/autoresolvedeb/raw/branch/main/linuxtoys/autoresolvedeb.sh"
         chmod +x autoresolvedeb.sh
         ./autoresolvedeb.sh
         rm autoresolvedeb.sh
-    elif [[ "$ID" =~ ^(arch|cachyos)$ ]] || [[ "$ID_LIKE" == *arch* ]] || [[ "$ID_LIKE" == *archlinux* ]]; then
+    elif is_arch || is_cachy; then
         fetch_from_mirror "autoresolvepkg.sh" \
             "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolvepkg.sh" \
             "https://git.linux.toys/psygreg/autoresolvedeb/raw/branch/main/linuxtoys/autoresolvepkg.sh"
         chmod +x autoresolvepkg.sh
         ./autoresolvepkg.sh
         rm autoresolvepkg.sh
-    elif [[ "$ID_LIKE" =~ (rhel|fedora) ]] || [ "$ID" = "fedora" ]; then
+    elif is_fedora; then
         fetch_from_mirror "autoresolverpm.sh" \
             "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolverpm.sh" \
             "https://git.linux.toys/psygreg/autoresolvedeb/raw/branch/main/linuxtoys/autoresolverpm.sh"
         chmod +x autoresolverpm.sh
         ./autoresolverpm.sh
         rm autoresolverpm.sh
-    elif [[ "$ID_LIKE" == *suse* ]]; then
+    elif is_suse; then
         fetch_from_mirror "autoresolverpm.sh" \
             "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolverpm.sh" \
             "https://git.linux.toys/psygreg/autoresolvedeb/raw/branch/main/linuxtoys/autoresolverpm.sh"
@@ -135,10 +134,9 @@ davinciboxd () {
 davinciboxatom () {
 
     dv_atom_deps () {
-        local nvGPU=$(lspci | grep -Ei '(nvidia|geforce)')
-        _packages=(toolbox podman lshw)
-        if [ -n "$nvGPU" ]; then
-            _packages+=(nvidia-container-toolkit)
+        pkg_install toolbox podman lshw
+        if is_nvidia; then
+            pkg_install nvidia-container-toolkit
         fi
         sudo_rq
         _install_
@@ -160,14 +158,11 @@ davinciboxatom () {
         ./setup.sh $_archive_run_name.run
 	    zenity --info --title "AutoDaVinciBox" --text "Installation successful." --height=300 --width=300
         # set up ROCm inside davincibox for a sizable performance increase for AMD GPUs
-        local GPU=$(lspci | grep -Ei '(radeon|rx)')
-        if [[ -n "$GPU" ]]; then
+        if is_amd; then
             distrobox enter davincibox -- bash -c "sudo dnf install -y rocm-comgr rocm-runtime rccl rocalution rocblas rocfft rocm-smi rocsolver rocsparse rocm-device-libs rocminfo rocm-hip hiprand rocm-opencl clinfo && sudo usermod -aG render,video \$USER"
             # stop to ensure usermod takes effect before usage of the software
             distrobox stop davincibox
         fi
-        cd ..
-        rm -rf davincibox
     }
 
 	while true; do
@@ -195,15 +190,11 @@ davinciboxatom () {
 	done
 }
 # if on atomic distros, go straight to davincibox
-#SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
-# language
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
-source "$SCRIPT_DIR/libs/helpers.lib"
 # warn about just installing Resolve, and still requiring a purchase from BMD to use Studio
 zenwrn "$msg034"
-cd $HOME
+prep_tmp
 if command -v rpm-ostree >/dev/null 2>&1; then
     davinciboxatom
 else
