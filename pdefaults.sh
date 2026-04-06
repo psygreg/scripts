@@ -9,11 +9,8 @@
 # nocontainer
 
 # --- Start of the script code ---
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
 source "$SCRIPT_DIR/libs/optimizers.lib"
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
-source "$SCRIPT_DIR/libs/helpers.lib"
 # system-agnostic scripts
 sysag_run () {
     if ! is_cachy; then
@@ -47,23 +44,22 @@ sysag_run () {
     # fix nvidia nouveau taking precedence over modeset on Solus; skipped in other OS
     nvidia_solus_lib
     # fix video thumbnails
-    _packages=(ffmpegthumbnailer)
+    pkg_install ffmpegthumbnailer
     # codec fix for Fedora/OpenSUSE
-    if [[ "$ID_LIKE" =~ (rhel|fedora) ]] || [[ "$ID" =~ "fedora" ]]; then
+    if is_fedora; then
         rpmfusion_chk
-        _packages+=(libavcodec-freeworld gstreamer1-plugins-ugly)
-    elif [[ "$ID_LIKE" == *suse* ]]; then
-        sudo zypper in -y opi
+        pkg_install libavcodec-freeworld gstreamer1-plugins-ugly
+    elif is_suse; then
+        pkg_install opi
         sudo opi codecs
     fi
-    _install_
 }
 # consolidated installation
 optimizer () {
     if [ ! -f $HOME/.local/.autopatch.state ]; then
-        cd $HOME
+        prep_tmp
         sysag_run
-        touch $HOME/.local/.autopatch.state
+        touch "$HOME/.local/.autopatch.state"
         zeninf "$msg036"
     else
         fatal "$msg234"
