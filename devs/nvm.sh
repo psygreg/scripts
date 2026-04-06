@@ -12,8 +12,7 @@ sudo_rq
 if command -v rpm-ostree &>/dev/null; then
     if [ ! -d "$HOME/.nvm" ]; then
     # revert to 'manual install' procedure, script doesn't work properly for atomic Fedora
-        _packages=(nodejs npm)
-        _install_
+        pkg_install nodejs npm
         prep_dir "$HOME/.nvm"
         export NVM_DIR="$HOME/.nvm" && (
         git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"

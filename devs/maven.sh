@@ -7,11 +7,10 @@
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-if is_solus; then
-    _packages=(apache-maven)
-else
-    _packages=(maven)
-fi
 sudo_rq
-_install_
+if is_solus; then
+    pkg_install apache-maven
+else
+    pkg_install maven
+fi
 zeninf "$msg018"

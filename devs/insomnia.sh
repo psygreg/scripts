@@ -6,11 +6,7 @@
 # repo: https://insomnia.rest/
 
 # --- Start of the script code ---
-#SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
-source "$SCRIPT_DIR/libs/helpers.lib"
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_flatpaks=(
-    rest.insomnia.Insomnia
-)
-_flatpak_
+pkg_flat rest.insomnia.Insomnia
 zeninf "$msg018"

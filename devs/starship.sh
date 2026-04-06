@@ -17,7 +17,8 @@ if [[ ":$PATH:" != *":/usr/local/bin"* ]]; then
 	[[ -f ~/.zshrc ]] && grep -q "/usr/local/bin" ~/.zshrc || echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.zshrc
 	[[ -f ~/.config/fish/config.fish ]] && grep -q "/usr/local/bin" ~/.config/fish/config.fish || echo 'set -gx PATH /usr/local/bin $PATH' >> ~/.config/fish/config.fish
 fi
-
+prep_create /usr/local/bin/starship # track file for reversion
+sudo rm /usr/local/bin/starship # remove created file to ensure correct procedure from starship script
 curl -fsSL https://starship.rs/install.sh | sudo sh -s -- -f -y && {
 	grep -q "starship init" ~/.bashrc || {
 		prep_edit "$HOME/.bashrc"

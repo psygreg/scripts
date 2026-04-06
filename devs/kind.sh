@@ -23,8 +23,7 @@ if ! command -v docker >/dev/null 2>&1 && \
 fi
 
 if is_arch || is_cachy; then
-    _packages=(kind-bin kubectl)
-    _install_
+    pkg_install kind-bin kubectl
 else
     arch="$(uname -m)"
     case "$arch" in

@@ -9,11 +9,9 @@
 source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
 sudo_rq
-_packages=(fish)
-_install_
-# TODO -- chsh event tracking
+pkg_install fish
 if command -v fish >/dev/null 2>&1; then
-	sudo chsh -s "$(type -p fish)" "$USER"
+	shell_change "$(type -p fish)" "$USER"
 	prep_edit "$HOME/.config/fish/config.fish"
 	if fish -c "curl -sL https://git.io/fisher | source; fisher install jorgebucaran/fisher"; then
 		zeninf "$msg018"

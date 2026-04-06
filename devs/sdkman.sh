@@ -9,11 +9,8 @@
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 
-type -p zip unzip || {
-	sudo_rq
-	_packages=(zip unzip)
-	_install_
-}
+sudo_rq
+pkg_install zip unzip
 
 [ -d ~/.sdkman ] && {
 	zenity --question \

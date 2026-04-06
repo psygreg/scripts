@@ -13,8 +13,7 @@ _lang_
 
 sudo_rq
 if is_arch || is_cachy; then
-	_packages=(zerotier-one)
-	_install_
+	pkg_install zerotier-one
 	if { sysd_enable zerotier-one && sysd_start zerotier-one; }; then
 		zeninf "ZeroTier installed successfully!"
 	else

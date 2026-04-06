@@ -35,9 +35,8 @@ jdk_install () {
         fatal "No valid Java packages were selected."
     fi
 
-    _packages=("${packages[@]}")
     sudo_rq
-    _install_
+    pkg_install "${packages[@]}"
 
     if ! command -v java >/dev/null 2>&1; then
         fatal "Java installation finished but 'java' command is not available."

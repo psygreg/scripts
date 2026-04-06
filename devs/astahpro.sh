@@ -9,7 +9,7 @@
 
 source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
-# TODO -- handle _deb_name and _rpm_name pkg events
+
 DEB_LINK="https://members.change-vision.com/download/files/astah_professional/latest/linux_deb"
 RPM_LINK="https://members.change-vision.com/download/files/astah_professional/latest/linux_rpm"
 
@@ -20,7 +20,7 @@ if is_debian;then
 
     if curl -fsSL "${_deb}" -o "/tmp/${_deb_name}"; then
 		sudo apt update || true
-		if sudo apt install -y "/tmp/${_deb_name}"; then
+		if pkg_fromfile "/tmp/${_deb_name}"; then
 			zeninf "Astah Pro installed successfully!"
 		else
 			fatal "Installation failed (apt)."
@@ -34,16 +34,10 @@ elif is_fedora;then
 
     if curl -fsSL "${_rpm}" -o "/tmp/${_rpm_name}"; then
 		if command -v dnf >/dev/null 2>&1; then
-			if sudo dnf install -y "/tmp/${_rpm_name}"; then
+			if pkg_fromfile "/tmp/${_rpm_name}"; then
 				zeninf "Astah Pro installed successfully!"
 			else
 				fatal "Installation failed (dnf)."
-			fi
-		else
-			if sudo yum install -y "/tmp/${_rpm_name}"; then
-				zeninf "Astah Pro installed successfully!"
-			else
-				fatal "Installation failed (yum)."
 			fi
 		fi
 	else

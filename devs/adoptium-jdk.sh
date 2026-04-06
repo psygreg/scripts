@@ -10,8 +10,7 @@ source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
 sudo_rq
 if is_debian;then
-    _packages=(apt-transport-https gpg)
-    _install_
+    pkg_install apt-transport-https gpg
     # Eclipse Adoptium GPG key
     curl -fsSL https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/adoptium.gpg > /dev/null
     # Adoptium apt repository
@@ -39,7 +38,6 @@ else
     fatal "Unsupported distribution"
 fi
 
-_packages=(temurin-21-jdk)
-_install_
+pkg_install temurin-21-jdk
 
 zeninf "Adoptium Temurin® JDK installed successfully!"

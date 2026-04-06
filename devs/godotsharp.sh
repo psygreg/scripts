@@ -43,11 +43,10 @@ if [ ! -d "$HOME/.local/godot" ]; then
         sudo chown root:root /etc/zypp/repos.d/microsoft-prod.repo
     fi
     if is_arch || is_cachy; then
-        _packages=(dotnet-sdk-9.0-bin)
-    else
-        _packages=(dotnet-sdk-9.0)
+        pkg_install dotnet-sdk-9.0-bin
+    else         
+        pkg_install dotnet-sdk-9.0
     fi
-    _install_
 else # update
     wget "$GODOT_MONO_URL" -O "$GODOT_MONO_ZIP"
     mkdir -p godot

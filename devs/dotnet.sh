@@ -16,16 +16,15 @@ if is_debian; then
     rm packages-microsoft-prod.deb
     sudo apt update
 elif [[ "$NAME" =~ "openSUSE Leap" ]]; then
-    sudo zypper in libicu -y
+    pkg_install libicu
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     wget https://packages.microsoft.com/config/opensuse/15/prod.repo
     sudo mv prod.repo /etc/zypp/repos.d/microsoft-prod.repo
     sudo chown root:root /etc/zypp/repos.d/microsoft-prod.repo
 fi
 if is_arch || is_cachy; then
-    _packages=(dotnet-sdk-9.0-bin)
+    pkg_install dotnet-sdk-9.0-bin
 else
-    _packages=(dotnet-sdk-9.0)
+    pkg_install dotnet-sdk-9.0
 fi
-_install_
 zeninf "$msg018"

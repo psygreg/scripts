@@ -6,10 +6,7 @@
 # repo: https://httpie.io/desktop
 
 # --- Start of the script code ---
-source "$SCRIPT_DIR/libs/helpers.lib"
+source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_flatpaks=(
-    io.httpie.Httpie
-)
-_flatpak_
+pkg_flat io.httpie.Httpie
 zeninf "$msg018"

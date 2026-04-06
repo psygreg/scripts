@@ -21,6 +21,5 @@ elif [[ "$ID_LIKE" =~ (rhel|fedora) ]] || [[ "$ID" =~ (fedora) ]]; then
         sudo dnf check-update
     fi
 fi
-_packages=(unityhub)
-_install_
+pkg_install unityhub
 zeninf "$msg018"

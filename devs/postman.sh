@@ -8,8 +8,5 @@
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
-_flatpaks=(
-    com.getpostman.Postman
-)
-_flatpak_
+pkg_flat com.getpostman.Postman
 zeninf "$msg018"

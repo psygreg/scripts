@@ -9,7 +9,6 @@
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-_packages=(nala)
 sudo_rq
-_install_
+pkg_install nala
 zeninf "$msg018"

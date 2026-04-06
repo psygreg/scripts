@@ -4,11 +4,11 @@
 # description: omb_desc
 # icon: ohmybash.png
 # repo: https://ohmybash.nntoan.com
+# revert: internal
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-# TODO -- add header for custom uninstall by running it again
 prep_edit "$HOME/.bashrc"
 _OSH=${OSH:-~/.oh-my-bash}
 [ -d ${_OSH} ] && {
