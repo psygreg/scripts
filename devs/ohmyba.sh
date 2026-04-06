@@ -8,8 +8,8 @@
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
-
+# TODO -- add header for custom uninstall by running it again
+prep_edit "$HOME/.bashrc"
 _OSH=${OSH:-~/.oh-my-bash}
 [ -d ${_OSH} ] && {
 	zenity --question \

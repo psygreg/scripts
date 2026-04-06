@@ -6,11 +6,8 @@
 # repo: https://github.com/pyenv
 
 # --- Start of the script code ---
-# install dependencies
-#SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 sudo_rq
 if [[ "$ID_LIKE" == *debian* ]] || [[ "$ID_LIKE" == *ubuntu* ]] || [ "$ID" == "debian" ] || [ "$ID" == "ubuntu" ]; then
     _packages=(make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev)
@@ -23,22 +20,27 @@ elif [[ "$ID_LIKE" == *suse* ]] || [ "$ID" = "suse" ]; then
 fi
 _install_
 # pyenv installation and addition to PATH
+prep_dir "$HOME/.pyenv"
 curl -fsSL https://pyenv.run | bash
 if [[ -f "${HOME}/.bash_profile" ]]; then
+    prep_edit "$HOME/.bash_profile"
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
     echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
     echo 'eval "$(pyenv init - bash)"' >> ~/.bash_profile
 elif [[ -f "$HOME/.profile" ]]; then
+    prep_edit "$HOME/.profile"
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile
     echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile
     echo 'eval "$(pyenv init - bash)"' >> ~/.profile
 fi
 if [[ -f "$HOME/.zshrc" ]]; then
+    prep_edit "$HOME/.zshrc"
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
     echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
     echo 'eval "$(pyenv init - zsh)"' >> ~/.zshrc
 fi
 git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+prep_edit "$HOME/.bashrc"
 echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 # basic usage instruction prompt
 zeninf "$msg135"

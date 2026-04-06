@@ -8,8 +8,8 @@
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
-# language
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
+_packages=(nala)
 sudo_rq
-sudo apt install -y nala
+_install_
+zeninf "$msg018"

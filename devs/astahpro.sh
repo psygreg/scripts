@@ -7,16 +7,13 @@
 # needed: adoptium-jdk
 # compat: debian, ubuntu, fedora
 
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
-_lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 source "$SCRIPT_DIR/libs/helpers.lib"
-
+_lang_
+# TODO -- handle _deb_name and _rpm_name pkg events
 DEB_LINK="https://members.change-vision.com/download/files/astah_professional/latest/linux_deb"
 RPM_LINK="https://members.change-vision.com/download/files/astah_professional/latest/linux_rpm"
 
 sudo_rq
-
 if is_debian;then
     _deb="$(curl -s -o /dev/null -w "%{redirect_url}\n" "${DEB_LINK}")"
     _deb_name=$(basename ${_deb})

@@ -6,13 +6,9 @@
 # repo: https://adoptium.net/
 # compat: debian, ubuntu, fedora, suse
 
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
-_lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 source "$SCRIPT_DIR/libs/helpers.lib"
-
+_lang_
 sudo_rq
-
 if is_debian;then
     _packages=(apt-transport-https gpg)
     _install_

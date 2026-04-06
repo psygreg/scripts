@@ -7,12 +7,11 @@
 # reboot: yes
 
 # --- Start of the script code ---
-#SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 # functions
 docker_in () { # install docker
-    cd $HOME
-    if [[ "$ID_LIKE" == *debian* ]] || [[ "$ID_LIKE" == *ubuntu* ]] || [ "$ID" == "ubuntu" ]; then
+    prep_tmp
+    if is_debian || is_ubuntu; then
         _packages=(docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin)
         sudo apt install -y ca-certificates curl
         sudo install -m 0755 -d /etc/apt/keyrings
@@ -23,7 +22,7 @@ docker_in () { # install docker
             $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
             sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
         sudo apt update
-    elif [ "$ID" == "debian" ]; then
+    elif is_debian; then
         _packages=(docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin)
         sudo apt install -y ca-certificates curl
         sudo install -m 0755 -d /etc/apt/keyrings
@@ -34,7 +33,7 @@ docker_in () { # install docker
             $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
             sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
         sudo apt update
-    elif [[ "$ID_LIKE" =~ (rhel|fedora) ]] || [[ "$ID" =~ (fedora) ]]; then
+    elif is_fedora; then
         if command -v rpm-ostree &> /dev/null; then
             curl -O https://download.docker.com/linux/fedora/docker-ce.repo
             sudo install -o 0 -g 0 -m644 docker-ce.repo /etc/yum.repos.d/docker-ce.repo
@@ -63,9 +62,8 @@ docker_in () { # install docker
     # enable rootless
     sudo usermod -aG docker $USER
     # enable services
-    sudo systemctl enable --now docker
-    sudo systemctl enable --now docker.socket
-    sleep 2
+    sysd_enable docker
+    sysd_enable docker.socket
 }
 
 if [[ "$DISABLE_ZENITY" == "1" ]] || zenity --question --title "Docker" --text "This will install Docker Engine. Proceed?" --width 360 --height 300; then

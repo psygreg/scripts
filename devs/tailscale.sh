@@ -6,12 +6,8 @@
 # compat: ubuntu, debian, fedora, arch, cachy, suse, solus
 
 # --- Start of the script code ---
-. /etc/os-release
-#SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
-_lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 source "$SCRIPT_DIR/libs/helpers.lib"
+_lang_
 sudo_rq
 if is_solus; then
     _packages=(tailscale)

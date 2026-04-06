@@ -9,7 +9,6 @@
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 
 configure_libvirt() {
     if is_ubuntu || is_debian; then
@@ -35,8 +34,8 @@ configure_libvirt() {
     done < /etc/passwd
 
     # Enable/start legacy and modern libvirt daemons (first available wins)
-    sudo systemctl enable --now libvirtd.service >/dev/null 2>&1 \
-        || sudo systemctl enable --now virtqemud.service >/dev/null 2>&1 \
+    { sysd_enable libvirtd.service && sysd_start libvirtd.service >/dev/null 2>&1; } \
+        || { sysd_enable virtqemud.service && sysd_start virtqemud.service >/dev/null 2>&1; } \
         || true
 }
 
