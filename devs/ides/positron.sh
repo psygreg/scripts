@@ -6,11 +6,9 @@
 # repo: https://positron.posit.co/
 # compat: debian, ubuntu, fedora
 
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
-_lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 source "$SCRIPT_DIR/libs/helpers.lib"
-
+_lang_
+# TODO --handle _pkg_name pkg events
 _tag=$(curl -s "https://api.github.com/repos/posit-dev/positron/releases/latest" | grep -oP '"tag_name": "\K(.*)(?=")')
 [ -z ${_tag} ] && { fatal "It was not possible to obtain the latest available version of positron."; exit 1;}
 
@@ -25,7 +23,7 @@ if is_debian; then
             fatal "Installation failed."
         fi
     else
-        falal "Failed to download: ${_pkg_name}"
+        fatal "Failed to download: ${_pkg_name}"
     fi
 elif is_fedora; then
 	_link="https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-${_tag}-x64.rpm"

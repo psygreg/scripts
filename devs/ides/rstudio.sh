@@ -6,11 +6,9 @@
 # repo: https://posit.co/products/open-source/rstudio/
 # compat: debian, ubuntu, fedora
 
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
-_lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 source "$SCRIPT_DIR/libs/helpers.lib"
-
+_lang_
+# TODO --handle _pkg_name pkg events
 _api_stable="https://www.rstudio.com/wp-content/downloads.json"
 
 _req=$(curl -fsSL "${_api_stable}" | \
