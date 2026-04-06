@@ -30,7 +30,9 @@ sysag_run () {
     # fix GTK app rendering for Intel BMG and Nvidia GPUs
     fix_intel_gtk
     # set proton to run on wine-wayland mode by default
-    wayland_proton_lib
+    if ! is_nvidia; then
+        wayland_proton_lib
+    fi
     # add alive timeout fix for Gnome
     if echo "$XDG_CURRENT_DESKTOP" | grep -qi 'gnome'; then
         sudo gsettings set org.gnome.mutter check-alive-timeout 20000
