@@ -76,7 +76,9 @@ optimizer () {
         # full kernel preemption for better latency
         preempt_lib
         # set proton to run on wine-wayland mode by default
-        wayland_proton_lib
+        if ! is_nvidia; then
+            wayland_proton_lib
+        fi
         # save autopatch state
         touch "$HOME/.local/.autopatch.state"
     else
