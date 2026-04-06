@@ -7,7 +7,6 @@
 
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-source "$SCRIPT_DIR/libs/lang/${langfile}.lib"
 sudo_rq
 # usb device list fetch
 select_usb_device() {
@@ -69,8 +68,10 @@ create_udev_rules() {
     while true; do
         if is_solus; then
             rule_file="/usr/lib/udev/rules.d/${rule_num}-usb-${vendor_name}.rules"
+            prep_create "$rule_file"
         else
             rule_file="/etc/udev/rules.d/${rule_num}-usb-${vendor_name}.rules"
+            prep_create "$rule_file"
         fi
         if [[ ! -f "$rule_file" ]]; then
             break
