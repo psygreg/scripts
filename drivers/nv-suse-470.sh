@@ -21,7 +21,6 @@ sudo_rq
 if ! zypper lr | grep -q "^${REPO_ALIAS}\s"; then
     sudo zypper ar -f "$REPO_URL" "nvidia"
 fi
-_packages=(x11-video-nvidiaG05 nvidia-computeG05)
-_install_
+pkg_install x11-video-nvidiaG05 nvidia-computeG05
 initramfs_upd
 zenity --info --title "Nvidia Drivers" --text "$msg036" --width 300 --height 300

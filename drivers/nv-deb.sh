@@ -14,12 +14,11 @@ _lang_
 sudo_rq
 prep_tmp
 wget https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/cuda-keyring_1.1-1_all.deb
-sudo dpkg -i cuda-keyring_1.1-1_all.deb
+pkg_fromfile cuda-keyring_1.1-1_all.deb
 sleep 1
 sudo apt-get update
 sleep 1
-_packages=(cuda-drivers)
-_install_
+pkg_install cuda-drivers
 sleep 1
 initramfs_upd
 bootloader_upd

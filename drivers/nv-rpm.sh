@@ -14,7 +14,6 @@ _lang_
 sudo_rq
 # check rpmfusion
 rpmfusion_chk
-_packages=(akmod-nvidia xorg-x11-drv-nvidia-cuda)
-_install_
+pkg_install akmod-nvidia xorg-x11-drv-nvidia-cuda
 initramfs_upd
 zenity --info --title "Nvidia Drivers" --text "$msg036" --width 300 --height 300

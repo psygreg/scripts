@@ -11,18 +11,17 @@ source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 # function
 rusticl_in () {
-    if [[ "$ID_LIKE" == *debian* ]] || [[ "$ID_LIKE" == *ubuntu* ]] || [ "$ID" == "debian" ] || [ "$ID" == "ubuntu" ]; then
-        _packages=(mesa-opencl-icd clinfo)
-    elif [[ "$ID_LIKE" =~ (rhel|fedora) ]] || [[ "$ID" =~ (fedora) ]]; then
-        _packages=(mesa-libOpenCL clinfo)
-    elif [[ "$ID_LIKE" == *suse* ]]; then
-        _packages=(Mesa-libRusticlOpenCL clinfo)
-    elif [[ "$ID" =~ ^(arch|cachyos)$ ]] || [[ "$ID_LIKE" == *arch* ]] || [[ "$ID_LIKE" == *archlinux* ]]; then
-        _packages=(opencl-mesa clinfo)
+    if is_debian || is_ubuntu; then
+        pkg_install mesa-opencl-icd clinfo
+    elif is_fedora; then
+        pkg_install mesa-libOpenCL clinfo
+    elif is_suse; then
+        pkg_install Mesa-libRusticlOpenCL clinfo
+    elif is_arch || is_cachy; then
+        pkg_install opencl-mesa clinfo
     elif is_solus; then
-        _packages=(ocl-icd clinfo)
+        pkg_install ocl-icd clinfo
     fi
-    _install_
 }
 if is_amd; then
     sudo_rq

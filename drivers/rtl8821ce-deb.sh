@@ -15,12 +15,9 @@ prep_tmp
 git clone https://github.com/tomaspinho/rtl8821ce.git
 sudo_rq
 # set up dependencies
-_packages=(bc module-assistant build-essential dkms)
-_install_
-# ensure removal of older driver -- TODO -- track package removal
-if dpkg -s rtl8821ce-dkms &>/dev/null; then
-    sudo apt remove -y rtl8821ce-dkms
-fi
+pkg_install bc module-assistant build-essential dkms
+# ensure removal of older driver
+pkg_remove rtl8821ce-dkms
 cd rtl8821ce
 sudo m-a prepare
 sudo ./dkms-install.sh

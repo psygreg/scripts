@@ -22,7 +22,6 @@ sudo_rq
 if ! zypper lr | grep -q "^${REPO_ALIAS}\s"; then
     sudo zypper ar -f "$REPO_URL" "nvidia"
 fi
-_packages=(x11-video-nvidiaG06 nvidia-computeG06)
-_install_
+pkg_install x11-video-nvidiaG06 nvidia-computeG06
 initramfs_upd
 zenity --info --title "Nvidia Drivers" --text "$msg036" --width 300 --height 300

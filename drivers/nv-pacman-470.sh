@@ -12,8 +12,7 @@
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 sudo_rq
-_packages=(nvidia-470xx-dkms nvidia-470xx-utils nvidia-470xx-settings)
-_install_
+pkg_install nvidia-470xx-dkms nvidia-470xx-utils nvidia-470xx-settings
 prep_tmp
 # set proper DRM mode on systemd
 prep_create /etc/modprobe.d/10-nvidia.conf
@@ -21,4 +20,5 @@ wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/10-nvi
 sudo cp 10-nvidia.conf /etc/modprobe.d/
 # refresh boot image
 initramfs_upd
+bootloader_upd
 zenity --info --title "Nvidia Drivers" --text "$msg036" --width 300 --height 300

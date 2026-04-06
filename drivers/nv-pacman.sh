@@ -12,7 +12,7 @@
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 sudo_rq
-_packages=(nvidia-open-dkms nvidia-utils nvidia-settings)
-_install_
+pkg_install nvidia-open-dkms nvidia-utils nvidia-settings
 initramfs_upd
+bootloader_upd
 zenity --info --title "Nvidia Drivers" --text "$msg036" --width 300 --height 300

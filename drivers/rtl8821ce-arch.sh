@@ -13,8 +13,7 @@ source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 sudo_rq
 # set up dependencies
-_packages=(rtl8821ce-dkms-git linux-headers dkms bc base-devel)
-_install_
+pkg_install rtl8821ce-dkms-git linux-headers dkms bc base-devel
 # blacklist rtw88_8821ce, which is borked
 if [ -f /etc/modprobe.d/blacklist.conf ]; then
     prep_edit /etc/modprobe.d/blacklist.conf

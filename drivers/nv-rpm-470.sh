@@ -14,7 +14,6 @@ _lang_
 sudo_rq
 # check rpmfusion
 rpmfusion_chk
-_packages=(xorg-x11-drv-nvidia-470xx akmod-nvidia-470xx xorg-x11-drv-nvidia-470xx-cuda)
-_install_
+pkg_install xorg-x11-drv-nvidia-470xx akmod-nvidia-470xx xorg-x11-drv-nvidia-470xx-cuda
 initramfs_upd
 zenity --info --title "Nvidia Drivers" --text "$msg036" --width 300 --height 300
