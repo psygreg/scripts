@@ -16,22 +16,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get modified files from PR
-        id: modified-files
+      - name: Generate git diff
+        id: diff
         run: |
-          # Get the list of modified files in the PR or from workflow_dispatch
+          # Generate diff based on event type
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            MODIFIED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+            git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} > /tmp/changes.diff
           else
-            # For workflow_dispatch, get files from the last commit
-            MODIFIED_FILES=$(git diff --name-only HEAD~1..HEAD)
+            # For workflow_dispatch, get diff from the last commit
+            git diff HEAD~1..HEAD > /tmp/changes.diff
           fi
-          echo "Files modified:"
-          echo "$MODIFIED_FILES"
-          # Store for later use
-          echo "files<<EOF" >> $GITHUB_OUTPUT
-          echo "$MODIFIED_FILES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          
+          # Show the diff for debugging
+          echo "Generated diff:"
+          cat /tmp/changes.diff
+          
+          # Check if diff is not empty
+          if [ -s /tmp/changes.diff ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Configure Git
         run: |
@@ -45,29 +50,26 @@ jobs:
           GITEA_OWNER: ${{ secrets.GITEA_OWNER }}
           GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
 
-      - name: Sync modified files to Gitea
-        run: |
-          # Copy modified files from GitHub to Gitea repo
-          while IFS= read -r file; do
-            if [ -n "$file" ]; then
-              echo "Syncing file: $file"
-              mkdir -p "gitea-repo/$(dirname "$file")"
-              cp "$file" "gitea-repo/$file"
-            fi
-          done <<< "${{ steps.modified-files.outputs.files }}"
-
-      - name: Commit and push to Gitea
+      - name: Apply diff to Gitea repository
+        if: steps.diff.outputs.has_changes == 'true'
         run: |
           cd gitea-repo
           
-          # Stage all modified and new files
-          git add -A
+          # Apply the diff
+          echo "Applying changes from diff..."
+          git apply /tmp/changes.diff
           
-          # Check if there are changes to commit
-          if [ -z "$(git status --porcelain)" ]; then
-            echo "No changes to push"
-            exit 0
-          fi
+          # Verify changes were applied
+          echo "Changes after applying diff:"
+          git status
+
+      - name: Commit and push to Gitea
+        if: steps.diff.outputs.has_changes == 'true'
+        run: |
+          cd gitea-repo
+          
+          # Stage all changes
+          git add -A
           
           # Create appropriate commit message
           if [ "${{ github.event_name }}" == "pull_request" ]; then
