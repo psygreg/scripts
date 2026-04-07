@@ -6,6 +6,7 @@
 # repo: https://stoat.chat
 # compat: none
 
+# TODO REWORK WHEN APP IS STABLE
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_

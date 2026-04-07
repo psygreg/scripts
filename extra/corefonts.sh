@@ -22,6 +22,6 @@ if [ ! -d "$HOME/.local/share/fonts/mscorefonts" ]; then
     done
     # install corefonts for user - flatpak and atomic compatible
     prep_dir ~/.local/share/fonts/mscorefonts
-    cp -v fonts/*.ttf fonts/*.TTF ~/.local/share/fonts/mscorefonts/
+    copy_ -v fonts/*.ttf fonts/*.TTF ~/.local/share/fonts/mscorefonts/
     zeninf "$msg018"
 fi

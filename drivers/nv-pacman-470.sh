@@ -17,7 +17,7 @@ prep_tmp
 # set proper DRM mode on systemd
 prep_create /etc/modprobe.d/10-nvidia.conf
 wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/10-nvidia.conf
-sudo cp 10-nvidia.conf /etc/modprobe.d/
+copy_ 10-nvidia.conf /etc/modprobe.d/
 # refresh boot image
 initramfs_upd
 bootloader_upd

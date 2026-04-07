@@ -24,12 +24,12 @@ if [ ! -d "$HOME/.local/godot" ]; then
     wget "$GODOT_MONO_URL" -O "$GODOT_MONO_ZIP"
     prep_dir "$HOME/.local/godot"
     unzip -d $HOME/godot "$GODOT_MONO_ZIP"
-    cp -rf godot "$HOME/.local/"
+    copy_ -rf godot "$HOME/.local/"
     wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/main/resources/godot/godot.png
-    cp godot.png "$HOME/.local/godot"
+    copy_ godot.png "$HOME/.local/godot"
     wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/main/resources/godot/godotsharp.desktop
     prep_create "$HOME/.local/share/applications/godotsharp.desktop"
-    cp godotsharp.desktop "$HOME/.local/share/applications"
+    copy_ godotsharp.desktop "$HOME/.local/share/applications"
     sudo_rq
     if is_debian; then
         wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -39,7 +39,7 @@ if [ ! -d "$HOME/.local/godot" ]; then
         sudo zypper in libicu -y
         sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
         wget https://packages.microsoft.com/config/opensuse/15/prod.repo
-        sudo mv prod.repo /etc/zypp/repos.d/microsoft-prod.repo
+        move_ prod.repo /etc/zypp/repos.d/microsoft-prod.repo
         sudo chown root:root /etc/zypp/repos.d/microsoft-prod.repo
     fi
     if is_arch || is_cachy; then
@@ -52,6 +52,6 @@ else # update
     mkdir -p godot
     unzip -d godot "$GODOT_MONO_ZIP"
     prep_dir "$HOME/.local/godot"
-    cp -rf godot "$HOME/.local/"
+    copy_ -rf godot "$HOME/.local/"
 fi
 zeninf "$msg018"

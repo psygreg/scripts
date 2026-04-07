@@ -15,7 +15,7 @@ if zenity --question --text "$msg253" --width 360 --height 300; then
         prep_dir_edit "$HOME/.config/GIMP" "$HOME/.local/share/applications"
         git clone --depth=1 https://github.com/Diolinux/PhotoGIMP.git /tmp/photogimp && {
             (
-                cp -rvf /tmp/photogimp/.config/* ~/.config/ && cp -rvf /tmp/photogimp/.local/* ~/.local/
+                copy_ -rvf /tmp/photogimp/.config/* ~/.config/ && copy_ -rvf /tmp/photogimp/.local/* ~/.local/
             ) && { zeninf "$msg018"; } || { fatal "Unable to complete installation"; }
         }
     }

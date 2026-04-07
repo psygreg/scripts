@@ -21,19 +21,19 @@ if [ ! -d "$HOME/.local/godot" ]; then
     wget "$GODOT_URL" -O "$GODOT_ZIP"
     unzip "$GODOT_ZIP"
     GODOT_BIN=$(ls Godot*_linux.x86_64)
-    mv "$GODOT_BIN" Godot
+    move_ "$GODOT_BIN" Godot
     mkdir -p "$HOME/.local/godot"
-    cp Godot -f "$HOME/.local/godot"
+    copy_ Godot -f "$HOME/.local/godot"
     wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/main/resources/godot/godot.png
-    cp godot.png "$HOME/.local/godot"
+    copy_ godot.png -f "$HOME/.local/godot"
     wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/main/resources/godot/godot.desktop
-    cp godot.desktop "$HOME/.local/share/applications/"
+    copy_ godot.desktop -f "$HOME/.local/share/applications/"
 else # update
     wget "$GODOT_URL" -O "$GODOT_ZIP"
     unzip "$GODOT_ZIP"
     GODOT_BIN=$(ls Godot*_linux.x86_64)
     prep_edit "$HOME/.local/godot/Godot"
-    mv "$GODOT_BIN" Godot
-    cp Godot -f "$HOME/.local/godot"
+    move_ "$GODOT_BIN" Godot
+    copy_ Godot -f "$HOME/.local/godot"
 fi
 zeninf "$msg018"

@@ -45,6 +45,6 @@ make
 prep_dir "/opt/resolve/IOPlugins/ffmpeg_encoder_plugin.dvcp.bundle/Contents/Linux-x86-64"
 PLUGIN_DIR="/opt/resolve/IOPlugins/ffmpeg_encoder_plugin.dvcp.bundle/Contents/Linux-x86-64"
 sudo_rq
-sudo cp ffmpeg_encoder_plugin.dvcp "$PLUGIN_DIR/"
+copy_ ffmpeg_encoder_plugin.dvcp "$PLUGIN_DIR/"
 
 zeninf "DaVinci Resolve FFmpeg Plugin installed successfully!"

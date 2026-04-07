@@ -18,7 +18,7 @@ else
     wget https://openrgb.org/releases/release_0.9/60-openrgb.rules
     sudo_rq
     prep_create /usr/lib/udev/rules.d/60-openrgb.rules
-    sudo cp -f 60-openrgb.rules /usr/lib/udev/rules.d/
+    copy_ -f 60-openrgb.rules /usr/lib/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
 fi
 zeninf "$msg036"

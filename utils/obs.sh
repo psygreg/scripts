@@ -19,7 +19,7 @@ obs_pipe () {
     wget https://github.com/dimtpap/obs-pipewire-audio-capture/releases/download/${ver}/linux-pipewire-audio-${ver}-flatpak-30.tar.gz || { echo "Download failed"; cd ..; rm -rf obspipe; return 1; }
     tar xvzf linux-pipewire-audio-${ver}-flatpak-30.tar.gz
     prep_dir "$HOME/.var/app/com.obsproject.Studio/config/obs-studio/plugins/linux-pipewire-audio"
-    cp -rf linux-pipewire-audio/* $HOME/.var/app/com.obsproject.Studio/config/obs-studio/plugins/linux-pipewire-audio/
+    copy_ -rf linux-pipewire-audio/* $HOME/.var/app/com.obsproject.Studio/config/obs-studio/plugins/linux-pipewire-audio/
     sudo flatpak override --filesystem=xdg-run/pipewire-0 com.obsproject.Studio
 }
 pkg_flat com.obsproject.Studio com.obsproject.Studio.Plugin.WaylandHotkeys
