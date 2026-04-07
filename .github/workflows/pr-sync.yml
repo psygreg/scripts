@@ -16,28 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Generate git diff
-        id: diff
-        run: |
-          # Generate diff based on event type
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} > /tmp/changes.diff
-          else
-            # For workflow_dispatch, get diff from the last commit
-            git diff HEAD~1..HEAD > /tmp/changes.diff
-          fi
-          
-          # Show the diff for debugging
-          echo "Generated diff:"
-          cat /tmp/changes.diff
-          
-          # Check if diff is not empty
-          if [ -s /tmp/changes.diff ]; then
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -50,35 +28,30 @@ jobs:
           GITEA_OWNER: ${{ secrets.GITEA_OWNER }}
           GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
 
-      - name: Apply diff to Gitea repository
-        if: steps.diff.outputs.has_changes == 'true'
+      - name: Cherry-pick commits to Gitea
         run: |
           cd gitea-repo
           
-          # Apply the diff
-          echo "Applying changes from diff..."
-          git apply /tmp/changes.diff
+          # Add GitHub as remote
+          git remote add github https://github.com/psygreg/scripts.git
+          git fetch github
           
-          # Verify changes were applied
-          echo "Changes after applying diff:"
-          git status
-
-      - name: Commit and push to Gitea
-        if: steps.diff.outputs.has_changes == 'true'
-        run: |
-          cd gitea-repo
-          
-          # Stage all changes
-          git add -A
-          
-          # Create appropriate commit message
+          # Determine commits to cherry-pick based on event type
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            COMMIT_MSG="Sync PR #${{ github.event.pull_request.number }} from GitHub: ${{ github.event.pull_request.title }}"
+            echo "Cherry-picking commits from PR #${{ github.event.pull_request.number }}..."
+            git cherry-pick ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}
           else
-            COMMIT_MSG="Sync from GitHub via workflow_dispatch"
+            echo "Cherry-picking the last commit from GitHub..."
+            git cherry-pick github/main -n
           fi
           
-          git commit -m "$COMMIT_MSG"
+          # Verify changes
+          echo "Changes after cherry-pick:"
+          git log --oneline -5
+
+      - name: Push to Gitea
+        run: |
+          cd gitea-repo
           git push origin main
         env:
           GIT_AUTHOR_NAME: github-actions[bot]
