@@ -19,9 +19,14 @@ jobs:
       - name: Get modified files from PR
         id: modified-files
         run: |
-          # Get the list of modified files in the PR
-          MODIFIED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-          echo "Files modified in this PR:"
+          # Get the list of modified files in the PR or from workflow_dispatch
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            MODIFIED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          else
+            # For workflow_dispatch, get files from the last commit
+            MODIFIED_FILES=$(git diff --name-only HEAD~1..HEAD)
+          fi
+          echo "Files modified:"
           echo "$MODIFIED_FILES"
           # Store for later use
           echo "files<<EOF" >> $GITHUB_OUTPUT
