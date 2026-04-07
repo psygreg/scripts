@@ -55,12 +55,13 @@ jobs:
               cp "$file" "gitea-repo/$file"
             fi
           done <<< "${{ steps.modified-files.outputs.files }}"
-          
-          cd gitea-repo
 
       - name: Commit and push to Gitea
         run: |
           cd gitea-repo
+          
+          # Stage all modified and new files
+          git add -A
           
           # Check if there are changes to commit
           if [ -z "$(git status --porcelain)" ]; then
@@ -68,8 +69,14 @@ jobs:
             exit 0
           fi
           
-          git add ${{ steps.modified-files.outputs.files }}
-          git commit -m "Sync PR #${{ github.event.pull_request.number }} from GitHub: ${{ github.event.pull_request.title }}"
+          # Create appropriate commit message
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            COMMIT_MSG="Sync PR #${{ github.event.pull_request.number }} from GitHub: ${{ github.event.pull_request.title }}"
+          else
+            COMMIT_MSG="Sync from GitHub via workflow_dispatch"
+          fi
+          
+          git commit -m "$COMMIT_MSG"
           git push origin main
         env:
           GIT_AUTHOR_NAME: github-actions[bot]
