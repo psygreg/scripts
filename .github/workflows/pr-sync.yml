@@ -41,14 +41,7 @@ jobs:
 
       - name: Sync modified files to Gitea
         run: |
-          cd gitea-repo
-          
-          # Add GitHub remote to fetch changes
-          git remote add github https://github.com/${{ github.repository }}.git
-          git fetch github ${{ github.event.pull_request.head.ref }}
-          
           # Copy modified files from GitHub to Gitea repo
-          cd ..
           while IFS= read -r file; do
             if [ -n "$file" ]; then
               echo "Syncing file: $file"
