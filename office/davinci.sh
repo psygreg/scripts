@@ -153,9 +153,13 @@ davinciboxatom () {
         sleep 1
         cd davincibox
         getresolve
-        unzip $_archive_name.zip
+        unzip "$_archive_name.zip"
         chmod +x setup.sh
-        ./setup.sh $_archive_run_name.run
+        if ./setup.sh "$_archive_run_name.run"; then
+            distrobox_created davincibox
+        else
+            fatal "Failed to create DaVinciBox container."
+        fi
 	    zenity --info --title "AutoDaVinciBox" --text "Installation successful." --height=300 --width=300
         # set up ROCm inside davincibox for a sizable performance increase for AMD GPUs
         if is_amd; then

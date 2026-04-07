@@ -26,9 +26,17 @@ fi
 sysd_enable pcscd.service
 sysd_start pcscd.service
 if is_ubuntu; then
-    distrobox-assemble create --file https://raw.githubusercontent.com/pedrohqb/distrobox-adv-br/refs/heads/main/distrobox-adv-br-legado
+    if distrobox-assemble create --file https://raw.githubusercontent.com/pedrohqb/distrobox-adv-br/refs/heads/main/distrobox-adv-br-legado; then
+        distrobox_created distrobox-adv-br
+    else
+        fatal "Falha ao criar o container Distrobox-Adv."
+    fi
 else
-    distrobox-assemble create --file https://raw.githubusercontent.com/pedrohqb/distrobox-adv-br/refs/heads/main/distrobox-adv-br
+    if distrobox-assemble create --file https://raw.githubusercontent.com/pedrohqb/distrobox-adv-br/refs/heads/main/distrobox-adv-br; then
+        distrobox_created distrobox-adv-br
+    else
+        fatal "Falha ao criar o container Distrobox-Adv."
+    fi
 fi
 pkg_flat com.ranfdev.DistroShelf
 zeninf "$msg018"
