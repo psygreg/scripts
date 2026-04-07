@@ -22,8 +22,8 @@ git clone https://github.com/RinCat/RTL88x2BU-Linux-Driver.git rtl88x2bu-git
 cd rtl88x2bu-git || fatal "Failed to access RTL88x2BU-Linux-Driver sources"
 
 prep_dir /usr/src
-sudo rm -rf /usr/src/rtl88x2bu-git
-sudo cp -rT . /usr/src/rtl88x2bu-git
+remove_ -rf /usr/src/rtl88x2bu-git
+copy_ -rT . /usr/src/rtl88x2bu-git
 sudo sed -i 's/PACKAGE_VERSION="@PKGVER@"/PACKAGE_VERSION="git"/g' /usr/src/rtl88x2bu-git/dkms.conf
 sudo dkms remove -m rtl88x2bu -v git --all 2>/dev/null || true
 sudo dkms add -m rtl88x2bu -v git
@@ -33,6 +33,7 @@ if [ -f /etc/modprobe.d/rtw8822bu.conf ]; then
     if grep -q "blacklist rtw88_8822bu" /etc/modprobe.d/rtw8822bu.conf; then
         echo "rtw88_8822bu is already blacklisted, skipping..."
     else
+        prep_edit /etc/modprobe.d/rtw8822bu.conf
         echo "blacklist rtw88_8822bu" | sudo tee -a /etc/modprobe.d/rtw8822bu.conf >/dev/null
     fi
 else

@@ -27,6 +27,7 @@ if [ -f /etc/modprobe.d/rtw8822bu.conf ]; then
     if grep -q "blacklist rtw88_8822bu" /etc/modprobe.d/rtw8822bu.conf; then
         echo "rtw88_8822bu is already blacklisted, skipping..."
     else
+        prep_edit /etc/modprobe.d/rtw8822bu.conf
         echo "blacklist rtw88_8822bu" | sudo tee -a /etc/modprobe.d/rtw8822bu.conf >/dev/null
     fi
 else
