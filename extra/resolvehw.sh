@@ -4,7 +4,7 @@
 # description: resolvehw_desc
 # icon: resolve.svg
 # repo: https://github.com/EdvinNilsson/ffmpeg_encoder_plugin
-# compat: ubuntu, debian, fedora, arch, cachy
+# compat: ubuntu, debian, fedora, arch, cachy, !solus
 
 # --- Start of the script code --- ## TODO for DaVinciBox
 source "$SCRIPT_DIR/libs/helpers.lib"

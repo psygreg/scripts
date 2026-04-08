@@ -2,7 +2,7 @@
 # name: ZRAM-Config
 # description: zram_desc
 # icon: preload.svg
-# compat: ubuntu, debian, arch
+# compat: ubuntu, debian, arch, !solus
 # nocontainer
 
 # --- Start of the script code ---

@@ -4,7 +4,7 @@
 # description: btassist_desc
 # icon: btassist.svg
 # nocontainer
-# compat: arch, cachy, fedora, suse, ubuntu, debian
+# compat: arch, cachy, fedora, suse, ubuntu, debian, !solus
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"

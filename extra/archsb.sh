@@ -3,7 +3,7 @@
 # version: 1.0
 # description: archsb_desc
 # icon: sirikali.png
-# compat: arch, cachy
+# compat: arch, cachy, !solus
 # reboot: yes
 # nocontainer
 

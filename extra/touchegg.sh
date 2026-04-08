@@ -3,7 +3,7 @@
 # version: 1.0
 # description: touchegg_desc
 # icon: touchegg.svg
-# compat: ubuntu, debian, fedora, suse
+# compat: ubuntu, debian, fedora, suse, !solus
 # nocontainer
 # repo: https://github.com/JoseExposito/touchegg
 

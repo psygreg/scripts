@@ -7,7 +7,7 @@
 # nocontainer
 # repo: https://thealexdev23.github.io/power-options/
 # optimized-only: yes
-# compat: !cachy
+# compat: !cachy, !solus
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/optimizers.lib"

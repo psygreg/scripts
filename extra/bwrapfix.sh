@@ -2,7 +2,7 @@
 # name: Bubblewrap Fix
 # description: bwrapfix_desc
 # icon: apparmor.svg
-# compat: ubuntu
+# compat: ubuntu, !solus
 # nocontainer
 
 # --- Start of the script code ---
