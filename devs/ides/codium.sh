@@ -47,5 +47,11 @@ else
     flatcodium="true"
 fi
 # patch for extensions
-{ [ -n "$flatcodium" ]; prep_create "$HOME/.var/app/com.vscodium.codium/config/VSCodium/product.json"; wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/product.json -O "$HOME/.var/app/com.vscodium.codium/config/VSCodium/product.json"; } || { prep_create "$HOME/.config/VSCodium/product.json"; wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/product.json -O "$HOME/.config/VSCodium/product.json"; }
+if [ -n "$flatcodium" ]; then
+    prep_create "$HOME/.var/app/com.vscodium.codium/config/VSCodium/product.json"
+    wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/product.json -O "$HOME/.var/app/com.vscodium.codium/config/VSCodium/product.json"
+else
+    prep_create "$HOME/.config/VSCodium/product.json"
+    wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/product.json -O "$HOME/.config/VSCodium/product.json"
+fi
 zeninf "$msg018"
