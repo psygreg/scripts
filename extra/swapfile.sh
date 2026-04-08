@@ -3,7 +3,7 @@
 # version: 1.0
 # description: swapfile_desc
 # icon: swapfile.svg
-# compat: ubuntu, debian, arch
+# compat: ubuntu, debian, arch, !solus
 # noconfirm: yes
 # nocontainer
 # revert: no

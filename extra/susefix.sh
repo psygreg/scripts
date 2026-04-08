@@ -3,7 +3,7 @@
 # version: 1.0
 # description: susefix_desc
 # icon: suse.svg
-# compat: suse
+# compat: suse, !solus
 # optimized-only: yes
 # revert: no
 

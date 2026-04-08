@@ -3,7 +3,7 @@
 # VERSION: 1.0
 # DESCRIPTION: ufw_desc
 # ICON: firewall.svg
-# compat: ubuntu, debian, arch
+# compat: ubuntu, debian, arch, !solus
 # nocontainer
 
 # --- Start of the script code ---
@@ -17,4 +17,3 @@ if command -v ufw &> /dev/null; then
     sudo ufw enable
 fi
 zeninf "$msg008"
-

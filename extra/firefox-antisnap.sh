@@ -4,7 +4,7 @@
 # description: firefoxsnap_desc
 # icon: firefox.svg
 # repo: https://www.mozilla.org
-# compat: ubuntu, !zorin
+# compat: ubuntu, !zorin, !solus
 # nocontainer
 
 # --- Start of the script code ---

@@ -34,7 +34,7 @@ iwd_in () {
             # enforce iwd backend for networkmanager
             prep_create /etc/NetworkManager/conf.d/iwd.conf
             wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/iwd.conf
-            move_ iwd.conf /etc/NetworkManager/conf.d/
+            sudo mv iwd.conf /etc/NetworkManager/conf.d/
             sysd_disable wpa_supplicant
             sysd_enable iwd
             return 0
@@ -51,7 +51,7 @@ iwd_in () {
             else
                 prep_create /etc/NetworkManager/conf.d/iwd.conf
                 wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/iwd.conf
-                move_ iwd.conf /etc/NetworkManager/conf.d/
+                sudo mv iwd.conf /etc/NetworkManager/conf.d/
                 # restart networkmanager with wpasupplicant disabled
                 sysd_disable wpa_supplicant
                 sysd_stop NetworkManager

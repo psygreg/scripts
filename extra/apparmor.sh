@@ -4,7 +4,7 @@
 # description: aa_desc
 # icon: apparmor.svg
 # repo: https://apparmor.net
-# compat: debian, arch, cachy
+# compat: debian, arch, cachy, !solus
 # reboot: yes
 # nocontainer
 

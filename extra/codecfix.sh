@@ -3,7 +3,7 @@
 # version: 1.0
 # description: codecfix_desc
 # icon: codec.svg
-# compat: suse, fedora, ostree
+# compat: suse, fedora, ostree, !solus
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/helpers.lib"

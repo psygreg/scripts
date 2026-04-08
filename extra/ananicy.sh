@@ -3,7 +3,7 @@
 # version: 1.0
 # description: ananicy_desc
 # icon: optimizer.svg
-# compat: arch
+# compat: arch, !solus
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"

@@ -4,7 +4,7 @@
 # description: resolvehw_desc
 # icon: resolve.svg
 # repo: https://github.com/EdvinNilsson/ffmpeg_encoder_plugin
-# compat: ubuntu, debian, fedora, arch, cachy
+# compat: ubuntu, debian, fedora, arch, cachy, !solus
 
 # --- Start of the script code --- ## TODO for DaVinciBox
 source "$SCRIPT_DIR/libs/helpers.lib"
@@ -45,6 +45,6 @@ make
 prep_dir "/opt/resolve/IOPlugins/ffmpeg_encoder_plugin.dvcp.bundle/Contents/Linux-x86-64"
 PLUGIN_DIR="/opt/resolve/IOPlugins/ffmpeg_encoder_plugin.dvcp.bundle/Contents/Linux-x86-64"
 sudo_rq
-copy_ ffmpeg_encoder_plugin.dvcp "$PLUGIN_DIR/"
+sudo cp ffmpeg_encoder_plugin.dvcp "$PLUGIN_DIR/"
 
 zeninf "DaVinci Resolve FFmpeg Plugin installed successfully!"
