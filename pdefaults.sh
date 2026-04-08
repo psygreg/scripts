@@ -3,7 +3,7 @@
 # version: 1.0
 # description: pdefaults_desc
 # icon: optimizer.svg
-# compat: ubuntu, debian, fedora, suse, arch, cachy, !zorin, !solus
+# compat: ubuntu, debian, fedora, suse, arch, cachy, !solus
 # reboot: yes
 # noconfirm: yes
 # nocontainer
@@ -13,7 +13,7 @@ source "$SCRIPT_DIR/libs/optimizers.lib"
 _lang_
 # system-agnostic scripts
 sysag_run () {
-    if ! is_cachy; then
+    if ! is_cachy && ! is_zorin; then
         # systemd patches
         cachyos_sysd_lib
     fi
