@@ -48,16 +48,16 @@ iwd_in () {
                 sysd_disable wpa_supplicant
                 sysd_stop wpa_supplicant
                 sysd_enable iwd
+                sysd_start iwd
             else
                 prep_create /etc/NetworkManager/conf.d/iwd.conf
                 wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/iwd.conf
                 move_ iwd.conf /etc/NetworkManager/conf.d/
                 # restart networkmanager with wpasupplicant disabled
                 sysd_disable wpa_supplicant
-                sysd_stop NetworkManager
-                sleep 1
                 sysd_enable iwd
-                sysd_start NetworkManager      
+                sysd_stop wpa_supplicant
+                sysd_start iwd
             fi
             return 0
         fi
