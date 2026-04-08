@@ -108,4 +108,5 @@ main_menu() {
         break
     done
 }
+main_menu
 
