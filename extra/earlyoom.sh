@@ -6,6 +6,7 @@
 # nocontainer
 # repo: https://github.com/rfjakob/earlyoom
 # optimized-only: yes
+# compat: !solus
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/optimizers.lib"

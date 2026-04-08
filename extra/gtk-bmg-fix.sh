@@ -6,6 +6,7 @@
 # reboot: yes
 # gpu: Intel, Nvidia
 # nocontainer
+# compat: !solus
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/optimizers.lib"
