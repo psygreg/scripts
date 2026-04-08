@@ -26,8 +26,6 @@ if command -v rpm-ostree &> /dev/null; then
     noopenh264 \
     --install ffmpeg openh264 gstreamer1-plugin-openh264 libavcodec-freeworld mesa-va-drivers-freeworld mesa-vdpau-drivers-freeworld mesa-vulkan-drivers-freeworld libavcodec-freeworld gstreamer1-plugins-bad-freeworld
 else
-    if rpm -qi "$pkg" &> /dev/null; then
-        sudo dnf swap ffmpeg-free ffmpeg
-    fi
+    sudo dnf swap ffmpeg-free ffmpeg --allowerasing
 fi
 zeninf "$msg036"
