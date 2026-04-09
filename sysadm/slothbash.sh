@@ -21,4 +21,4 @@ if [ -f "$HOME/.config/starship.toml" ]; then
 else
     prep_create "$HOME/.config/starship.toml"
 fi
-curl -fsSL https://raw.githubusercontent.com/psygreg/sloth-bash/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/psygreg/sloth-bash/main/install.sh | bash -s -- --from-app
