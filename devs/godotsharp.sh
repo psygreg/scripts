@@ -8,7 +8,6 @@
 
 # --- Start of the script code ---
 # when there are updates, make sure to edit the .desktop files in resources/godot as well!
-#SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 prep_tmp
@@ -23,8 +22,7 @@ GODOT_MONO_ZIP="Godot_latest_mono_linux.x86_64.zip"
 if [ ! -d "$HOME/.local/godot" ]; then
     wget "$GODOT_MONO_URL" -O "$GODOT_MONO_ZIP"
     prep_dir "$HOME/.local/godot"
-    unzip -d $HOME/godot "$GODOT_MONO_ZIP"
-    copy_ -rf godot "$HOME/.local/"
+    unzip -d "$HOME/.local/godot" "$GODOT_MONO_ZIP"
     wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/main/resources/godot/godot.png
     copy_ godot.png "$HOME/.local/godot"
     wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/main/resources/godot/godotsharp.desktop
@@ -49,9 +47,7 @@ if [ ! -d "$HOME/.local/godot" ]; then
     fi
 else # update
     wget "$GODOT_MONO_URL" -O "$GODOT_MONO_ZIP"
-    mkdir -p godot
-    unzip -d godot "$GODOT_MONO_ZIP"
-    prep_dir "$HOME/.local/godot"
-    copy_ -rf godot "$HOME/.local/"
+    prep_dir_edit "$HOME/.local/godot"
+    unzip -d "$HOME/.local/godot" "$GODOT_MONO_ZIP"
 fi
 zeninf "$msg018"
