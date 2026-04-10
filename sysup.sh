@@ -25,6 +25,7 @@ elif is_solus; then
     sudo eopkg up -y || fatal "Failed to upgrade packages"
 fi
 if which flatpak > /dev/null; then
+    flatpak uninstall --unused --delete-data -y || fatal "Failed to remove orphaned flatpak packages"
     flatpak update -y || fatal "Failed to update flatpak packages"
 fi
 zeninf "$sysup_completed"
