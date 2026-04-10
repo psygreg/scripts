@@ -12,7 +12,7 @@ DESKTOP_FILE="$DESKTOP_DIR/google_drive.desktop"
 RCLONE_CONFIG_DIR="$HOME/.config/rclone"
 
 display_guide() {
-   zenity --text-info \
+   echo "$gdrive_guide_text" | zenity --text-info \
       --title="RClone Google Drive Setup" \
       --text="$gdrive_guide_text" \
       --width=700 \
@@ -20,7 +20,8 @@ display_guide() {
       --no-wrap
    
    if [ $? -ne 0 ]; then
-      fatal "Setup cancelled by user"
+      echo "Setup cancelled by user"
+      exit 100
    fi
 }
 
