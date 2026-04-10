@@ -65,7 +65,7 @@ if is_fedora; then
 elif is_debian || is_ubuntu; then
     sudo apt autoremove -y || fatal "Failed to remove orphaned packages"
     sudo apt upgrade -y || fatal "Failed to upgrade packages"
-    if is_ubuntu && release_upgrade; then
+    if is_ubuntu && [[ "$ID" == "ubuntu" ]] && release_upgrade; then
         if offer_release_upgrade; then
             sudo do-release-upgrade || fatal "Failed to start Ubuntu release upgrade"
         fi
