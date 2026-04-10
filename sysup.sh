@@ -22,31 +22,16 @@ needs_reboot() {
     fi
 }
 release_upgrade() {
-    local current_year=$(date +%Y)
-    local current_month=$(date +%m)
-    # Only offer upgrade in May (05) or November (11) for stability
-    if [[ "$current_month" == "05" || "$current_month" == "11" ]]; then
-        if is_ubuntu; then
-            { do-release-upgrade -c && return 0; } || return 1      
-        elif is_fedora; then
-            local count=0
-            for ((y = 2026; y <= current_year; y++)); do
-                if [[ $y -lt $current_year ]]; then
-                    count=$((count + 2))
-                else
-                    if [[ $current_month -ge 5 ]]; then
-                        ((count++)) 
-                    fi
-                    if [[ $current_month -ge 11 ]]; then
-                        ((count++)) 
-                    fi
-                fi
-            done
-            fedora_version=$((43 + count))
-            return 0
+    if is_ubuntu; then
+        { do-release-upgrade -c && return 0; } || return 1      
+    elif is_fedora; then
+        pkg_install jq
+        fedora_version=$(curl -s https://fedoraproject.org/releases.json | jq -r '.[] | select(.version | test("Beta") | not) | .version' | sort -rn | head -1)
+        if [[ -z "$fedora_version" ]]; then
+            return 1  # Failed to fetch version info
         fi
+        { [ "$VERSION_ID" != "$fedora_version" ] && return 0; } || return 1
     fi
-    return 1
 }
 offer_release_upgrade() {
     zenity --question --text="$sysup_available" --title="Release Upgrade" || return 1
