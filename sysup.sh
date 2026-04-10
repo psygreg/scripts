@@ -1,7 +1,7 @@
 #!/bin/bash
 # name: sysup
 # description: sysup_desc
-# icon:
+# icon: topgrade.svg
 # revert: no
 # compat: !ostree, !ublue
 
