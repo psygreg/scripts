@@ -21,14 +21,55 @@ needs_reboot() {
         return 0 # no way of reliably checking for this on Solus, leave that to the user but always recommend it anyway
     fi
 }
+release_upgrade() {
+    local current_year=$(date +%Y)
+    local current_month=$(date +%m)
+    # Only offer upgrade in May (05) or November (11) for stability
+    if [[ "$current_month" == "05" || "$current_month" == "11" ]]; then
+        if is_ubuntu; then
+            { do-release-upgrade -c && return 0; } || return 1      
+        elif is_fedora; then
+            local count=0
+            for ((y = 2026; y <= current_year; y++)); do
+                if [[ $y -lt $current_year ]]; then
+                    count=$((count + 2))
+                else
+                    if [[ $current_month -ge 5 ]]; then
+                        ((count++)) 
+                    fi
+                    if [[ $current_month -ge 11 ]]; then
+                        ((count++)) 
+                    fi
+                fi
+            done
+            fedora_version=$((43 + count))
+            return 0
+        fi
+    fi
+    return 1
+}
+offer_release_upgrade() {
+    zenity --question --text="$sysup_available" --title="Release Upgrade" || return 1
+}
 
 echo "$sysup_starting"
 if is_fedora; then
     sudo dnf autoremove -y || fatal "Failed to remove orphaned packages"
     sudo dnf upgrade -y || fatal "Failed to upgrade packages"
+    if release_upgrade; then
+        if offer_release_upgrade; then
+            sudo dnf system-upgrade download --releasever=$fedora_version -y || fatal "Failed to download Fedora $fedora_version upgrade"
+            sudo dnf system-upgrade reboot || fatal "Failed to reboot for Fedora $fedora_version upgrade"
+        fi
+    fi
 elif is_debian || is_ubuntu; then
     sudo apt autoremove -y || fatal "Failed to remove orphaned packages"
     sudo apt upgrade -y || fatal "Failed to upgrade packages"
+    if is_ubuntu && release_upgrade; then
+        if offer_release_upgrade; then
+            sudo do-release-upgrade || fatal "Failed to start Ubuntu release upgrade"
+        fi
+    fi
 elif is_arch || is_cachy; then
     sudo pacman -Rns $(pacman -Qdtq) --noconfirm || fatal "Failed to remove orphaned packages"
     sudo pacman -Syu --noconfirm || fatal "Failed to upgrade packages"
