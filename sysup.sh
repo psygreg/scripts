@@ -70,7 +70,7 @@ if which flatpak > /dev/null; then
     flatpak update -y || fatal "Failed to update flatpak packages"
 fi
 if needs_reboot; then
-    zeninf "$sysup_rebootreq"
+    { [ "$DISABLE_ZENITY" = "1" ] && notify-send "$sysup_rebootreq" --icon=system-reboot --urgency=critical --app-name="LinuxToys Update"; } || zeninf "$sysup_rebootreq"
 else
-    zeninf "$sysup_completed"
+    { [ "$DISABLE_ZENITY" = "1" ] && echo "$sysup_completed"; } || zeninf "$sysup_completed"
 fi
