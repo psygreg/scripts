@@ -12,8 +12,7 @@ _lang_
 needs_reboot() {
     if is_fedora; then
         output=$({ [ "$UPD_SERVICE" = "1" ] && dnf needs-restarting -r; } || sudo dnf needs-restarting -r 2>&1)
-        echo "$output" | grep -q "Reboot should not be necessary" && return 1
-        return 0
+        { echo "$output" | grep -q "Reboot should not be necessary" && return 1; } || return 0
     elif is_debian || is_ubuntu; then
         [ -f /var/run/reboot-required ]
     elif is_arch || is_cachy; then
@@ -40,20 +39,12 @@ release_upgrade() {
 offer_release_upgrade() {
     zenity --question --text="$sysup_available" --title="Release Upgrade" || return 1
 }
-update_user_flatpaks() {
-    local command="$1"
-    while IFS=: read -r user _ uid _ _ _ _; do
-        [[ "$uid" -ge 1000 ]] || continue
-        [[ "$uid" -eq 65534 ]] && continue
-        [[ -S "/run/user/$uid/bus" ]] || continue
 
-        if [ "$command" = "uninstall" ]; then
-            sudo -u "$user" env XDG_RUNTIME_DIR="/run/user/$uid" flatpak $command --user --unused --delete-data -y 2>/dev/null || true
-        else
-            sudo -u "$user" env XDG_RUNTIME_DIR="/run/user/$uid" flatpak $command --user -y 2>/dev/null || true
-        fi
-    done < /etc/passwd
-}
+if [ "$UPD_SERVICE" = "1" ] && [ "$USER" != "root" ]; then
+    flatpak uninstall --unused --delete-data -y
+    flatpak update -y
+    echo "$sysup_completed" && exit 0
+fi
 
 echo "$sysup_starting"
 if is_fedora; then
@@ -90,15 +81,8 @@ elif is_solus; then
     sudo eopkg up -y || fatal "Failed to upgrade packages"
 fi
 if which flatpak &> /dev/null; then
-    if [ "$UPD_SERVICE" = "1" ]; then
-        flatpak uninstall --system --unused --delete-data -y || true
-        update_user_flatpaks uninstall
-        flatpak update --system -y || true
-        update_user_flatpaks update
-    else
-        flatpak uninstall --unused --delete-data -y || fatal "Failed to remove orphaned flatpak packages"
-        flatpak update -y || fatal "Failed to update flatpak packages"
-    fi
+    { [ "$UPD_SERVICE" = "1" ] && flatpak uninstall --system --unused --delete-data -y; } || flatpak uninstall --unused --delete-data -y || fatal "Failed to remove orphaned flatpak packages"
+    { [ "$UPD_SERVICE" = "1" ] && flatpak update --system -y; } || flatpak update -y || fatal "Failed to upgrade flatpak packages"
 fi
 if needs_reboot; then
     if [ "$UPD_SERVICE" = "1" ]; then
