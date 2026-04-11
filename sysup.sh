@@ -22,6 +22,7 @@ needs_reboot() {
     fi
 }
 release_upgrade() {
+    [ "$UPD_SERVICE" = "1" ] && return 1 # don't check for release upgrades if we're running as a background service
     if is_ubuntu; then
         { do-release-upgrade -c && return 0; } || return 1      
     elif is_fedora; then
@@ -40,7 +41,7 @@ offer_release_upgrade() {
 echo "$sysup_starting"
 if is_fedora; then
     sudo dnf autoremove -y || fatal "Failed to remove orphaned packages"
-    sudo dnf upgrade -y || fatal "Failed to upgrade packages"
+    { [ "$UPD_SERVICE" = "1" ] && sudo dnf upgrade -y --setopt=throttle=2M; } || sudo dnf upgrade -y || fatal "Failed to upgrade packages"
     if release_upgrade; then
         if offer_release_upgrade; then
             sudo dnf system-upgrade download --releasever=$fedora_version -y || fatal "Failed to download Fedora $fedora_version upgrade"
@@ -49,7 +50,7 @@ if is_fedora; then
     fi
 elif is_debian || is_ubuntu; then
     sudo apt autoremove -y || fatal "Failed to remove orphaned packages"
-    sudo apt upgrade -y || fatal "Failed to upgrade packages"
+    { [ "$UPD_SERVICE" = "1" ] && sudo apt upgrade -y Acquire::http::Dl-Limit=2048 -o Acquire::https::Dl-Limit=2048; } || sudo apt upgrade -y || fatal "Failed to upgrade packages"
     if is_ubuntu && [[ "$ID" == "ubuntu" ]] && release_upgrade; then
         if offer_release_upgrade; then
             sudo do-release-upgrade || fatal "Failed to start Ubuntu release upgrade"
@@ -70,7 +71,7 @@ if which flatpak > /dev/null; then
     flatpak update -y || fatal "Failed to update flatpak packages"
 fi
 if needs_reboot; then
-    { [ "$DISABLE_ZENITY" = "1" ] && notify-send "$sysup_rebootreq" --icon=system-reboot --urgency=critical --app-name="LinuxToys Update"; } || zeninf "$sysup_rebootreq"
+    { [ "$UPD_SERVICE" = "1" ] && notify-send "$sysup_rebootreq" --icon=system-reboot --urgency=critical --app-name="LinuxToys Update"; } || zeninf "$sysup_rebootreq"
 else
-    { [ "$DISABLE_ZENITY" = "1" ] && echo "$sysup_completed"; } || zeninf "$sysup_completed"
+    { [ "$UPD_SERVICE" = "1" ] && echo "$sysup_completed"; } || zeninf "$sysup_completed"
 fi
