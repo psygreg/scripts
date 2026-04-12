@@ -3,7 +3,7 @@
 # version: 1.0
 # description: lutris_desc
 # icon: lutris.svg
-# nocontainer: ubuntu, debian, suse
+# nocontainer: ubuntu, debian, suse, arch
 # repo: https://lutris.net
 
 # --- Start of the script code ---
