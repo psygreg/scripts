@@ -3,7 +3,6 @@
 # version: 1.0
 # description: davinci_desc
 # icon: resolve.svg
-# compat: !zorin
 
 # functions
 #create JSON, user agent and download Resolve
