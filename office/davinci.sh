@@ -166,6 +166,8 @@ davinciboxatom () {
             # stop to ensure usermod takes effect before usage of the software
             distrobox stop davincibox
         fi
+        cd $HOME
+        sudo rm -rf davincibox #cleanup
     }
 
 	while true; do
@@ -197,7 +199,7 @@ source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 # warn about just installing Resolve, and still requiring a purchase from BMD to use Studio
 zenwrn "$msg034"
-prep_tmp
+cd $HOME
 if command -v rpm-ostree >/dev/null 2>&1; then
     davinciboxatom
 else
