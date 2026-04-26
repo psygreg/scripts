@@ -3,7 +3,7 @@
 # version: 1.0
 # description: pdefaults_desc
 # icon: optimizer.svg
-# compat: ubuntu, debian, fedora, suse, arch, cachy, !solus
+# compat: ubuntu, debian, fedora, suse, arch, cachy
 # reboot: yes
 # noconfirm: yes
 # nocontainer
@@ -21,10 +21,12 @@ sysag_run () {
     sboost_lib
     # disable split-lock mitigation, which is not a security feature therefore is safe to disable
     dsplitm_lib
-    # add earlyoom configuration
-    earlyoom_lib
+    # add earlyoom configuration, Fedora already has systemd-oomd
+    if ! is_fedora && ! is_ostree; then
+        earlyoom_lib
+    fi
     # change intel driver to Xe on discrete GPUs
-    if ! is_solus && ! is_fedora; then
+    if ! is_fedora && ! is_ubuntu; then
         intel_xe_lib
     fi
     # fix GTK app rendering for Intel BMG and Nvidia GPUs
@@ -33,24 +35,10 @@ sysag_run () {
     if echo "$XDG_CURRENT_DESKTOP" | grep -qi 'gnome'; then
         sudo gsettings set org.gnome.mutter check-alive-timeout 20000
     fi
-    # vm.min_free_kbytes dynamic setup
-    if ! is_solus; then
-        free_mem_fix
-    fi
+    # vm.min_free_kbytes dynamic setup - disabled for further testing
+    # free_mem_fix
     # full kernel preemption for better latency in Fedora -- will skip automatically in other OS
     preempt_lib
-    # fix nvidia nouveau taking precedence over modeset on Solus; skipped in other OS
-    nvidia_solus_lib
-    # fix video thumbnails
-    pkg_install ffmpegthumbnailer
-    # codec fix for Fedora/OpenSUSE
-    if is_fedora; then
-        rpmfusion_chk
-        pkg_install libavcodec-freeworld gstreamer1-plugins-ugly
-    elif is_suse; then
-        pkg_install opi
-        sudo opi codecs
-    fi
 }
 # consolidated installation
 optimizer () {
@@ -60,7 +48,8 @@ optimizer () {
         touch "$HOME/.local/.autopatch.state"
         zeninf "$msg036"
     else
-        fatal "$msg234"
+        zenwrn "$msg234"
+        exit 100
     fi
 }
 # menu

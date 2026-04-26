@@ -15,7 +15,7 @@ root_swap () {
     if [ "$(findmnt -n -o FSTYPE /)" = "btrfs" ]; then
         sudo_rq
         sudo btrfs subvolume create /swap
-        sudo btrfs filesystem mkswapfile --size 8g --uuid clear /swap/swapfile
+        sudo btrfs filesystem mkswapfile --size 10g --uuid clear /swap/swapfile
         sudo swapon /swap/swapfile
         echo "# swapfile" | sudo tee -a /etc/fstab
         echo "/swap/swapfile none swap defaults 0 0" | sudo tee -a /etc/fstab
@@ -23,7 +23,7 @@ root_swap () {
         return 0
     else
         sudo_rq
-        sudo mkswap -U clear --size 8G --file /swapfile
+        sudo mkswap -U clear --size 10G --file /swapfile
         sudo swapon /swapfile
         echo "# swapfile" | sudo tee -a /etc/fstab
         echo "/swapfile none swap defaults 0 0" | sudo tee -a /etc/fstab
@@ -37,7 +37,7 @@ home_swap () {
     if [ "$(findmnt -n -o FSTYPE /home)" = "btrfs" ]; then
         sudo_rq
         sudo btrfs subvolume create /home/swap
-        sudo btrfs filesystem mkswapfile --size 8g --uuid clear /home/swap/swapfile
+        sudo btrfs filesystem mkswapfile --size 10g --uuid clear /home/swap/swapfile
         sudo swapon /home/swap/swapfile
         echo "# swapfile" | sudo tee -a /etc/fstab
         echo "/home/swap/swapfile none swap defaults 0 0" | sudo tee -a /etc/fstab
@@ -45,7 +45,7 @@ home_swap () {
         return 0
     else
         sudo_rq
-        sudo mkswap -U clear --size 8G --file /home/swapfile
+        sudo mkswap -U clear --size 10G --file /home/swapfile
         sudo swapon /home/swapfile
         echo "# swapfile" | sudo tee -a /etc/fstab
         echo "/home/swapfile none swap defaults 0 0" | sudo tee -a /etc/fstab
@@ -54,9 +54,11 @@ home_swap () {
     fi
 }
 
-if swapon --show | grep -q '^'; then
-    nonfatal "Swap already enabled in your system."
-    exit 0
+# Check for existing active swap
+ACTIVE_SWAP=$(swapon --show 2>/dev/null | tail -n +2)
+if [ -n "$ACTIVE_SWAP" ]; then
+    zenwrn "Swap already enabled in your system:\n$ACTIVE_SWAP"
+    exit 100
 else
     # menu
     while true; do
