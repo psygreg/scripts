@@ -5,6 +5,7 @@
 # compat: ubuntu
 # nocontainer
 # revert: no
+# gpu: AMD, Intel
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
