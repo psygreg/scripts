@@ -202,6 +202,8 @@ zenwrn "$msg034"
 cd $HOME
 if command -v rpm-ostree >/dev/null 2>&1; then
     davinciboxatom
+elif is_solus; then
+    davinciboxd
 else
     # menu
     while true; do
