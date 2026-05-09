@@ -195,7 +195,7 @@ davinciboxatom () {
 	done
 }
 # if on atomic distros, go straight to davincibox
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
+source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
 # warn about just installing Resolve, and still requiring a purchase from BMD to use Studio
 zenwrn "$msg034"
