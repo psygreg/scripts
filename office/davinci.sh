@@ -200,6 +200,7 @@ _lang_
 # warn about just installing Resolve, and still requiring a purchase from BMD to use Studio
 zenwrn "$msg034"
 cd $HOME
+export SCRIPT_DIR
 if command -v rpm-ostree >/dev/null 2>&1; then
     davinciboxatom
 elif is_solus; then
