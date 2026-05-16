@@ -5,7 +5,7 @@
 # icon: iwd.svg
 # reboot: yes
 # noconfirm: yes
-# compat
+# compat: !cachy
 # nocontainer
 
 # --- Start of the script code ---
