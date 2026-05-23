@@ -12,7 +12,9 @@ _lang_
 if command -v rpm-ostree >/dev/null 2>&1 || [ "$ID" == "fedora" ] || [[ "$ID_LIKE" =~ "fedora" ]]; then
     sudo_rq
     rpmfusion_chk
-    pkg_install gamescope
+    if ! rpm -qi terra-gamescope &>/dev/null; then
+        pkg_install gamescope
+    fi
 elif [ "$ID" == "arch" ] || [ "$ID" == "cachyos" ] || [[ "$ID_LIKE" =~ "arch" ]] || [[ "$ID_LIKE" =~ "archlinux" ]]; then
     sudo_rq
     multilib_chk
