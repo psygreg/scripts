@@ -29,20 +29,31 @@ display_guide() {
 configure_rclone() {
    rclone config
     
-   if [ $? -eq 0 ]; then
-      zeninf "Rclone configured successfully."
-      REMOTE_NAME=$(zenity --entry \
-         --title="Remote Name" \
-         --text="What did you name your Google Drive remote?" \
-         --entry-text="GoogleDrive")
-      
-      if [ -z "$REMOTE_NAME" ]; then
-         fatal "Remote name cannot be empty"
-      fi
-      REMOTE_NAME="${REMOTE_NAME}:"
-   else
-      fatal "Rclone configuration failed"
+   # Get list of configured remotes
+   REMOTES=$(rclone listremotes)
+   
+   if [ -z "$REMOTES" ]; then
+      fatal "No remotes configured. Please configure a remote using 'rclone config' first."
    fi
+   
+   # Convert remotes to array for zenity
+   REMOTE_ARRAY=()
+   while IFS= read -r remote; do
+      REMOTE_ARRAY+=("$remote")
+   done <<< "$REMOTES"
+   
+   # Ask user to select the Google Drive remote
+   REMOTE_NAME=$(zenity --list \
+      --title="Select Google Drive Remote" \
+      --text="Which remote is your Google Drive?" \
+      --column="Remotes" \
+      "${REMOTE_ARRAY[@]}")
+   
+   if [ -z "$REMOTE_NAME" ]; then
+      fatal "No remote selected"
+   fi
+   
+   zeninf "Using remote: $REMOTE_NAME"
 }
 mount_drive() {
    prep_dir "$MOUNT_POINT"
