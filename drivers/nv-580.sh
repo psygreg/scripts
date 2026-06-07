@@ -4,7 +4,7 @@
 # icon: nvidia.svg
 # nocontainer
 # gpu: Nvidia
-# compat: debian, arch, cachy, fedora, rhel
+# compat: debian, arch, !cachy, fedora, rhel
 # reboot: yes
 
 # --- Start of the script code ---
