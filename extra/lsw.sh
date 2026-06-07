@@ -51,7 +51,7 @@ EOF
             if is_rhel; then
                 sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
             else
-                sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+                sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
             fi
         fi
     fi
