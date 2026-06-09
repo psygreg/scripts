@@ -20,10 +20,11 @@ declare -A _font_urls=(
 	["FiraCode"]="${_release_base_url}/FiraCode.tar.xz"
 	["Hack"]="${_release_base_url}/Hack.tar.xz"
 	["Meslo"]="${_release_base_url}/Meslo.tar.xz"
+	["AdwaitaMono"]="${_release_base_url}/AdwaitaMono.tar.xz"
 )
 
 _font_options=()
-for _font in JetBrainsMono FiraCode Hack Meslo; do
+for _font in JetBrainsMono FiraCode Hack Meslo AdwaitaMono; do
 	_font_options+=(TRUE "${_font}" "${_font_urls[${_font}]}")
 done
 
@@ -46,7 +47,7 @@ if _zenity_can_run; then
 		exit 0
 	fi
 else
-	_selected_fonts=(JetBrainsMono FiraCode Hack Meslo)
+	_selected_fonts=(JetBrainsMono FiraCode Hack Meslo AdwaitaMono)
 fi
 rm -f "${_selection_file}"
 
