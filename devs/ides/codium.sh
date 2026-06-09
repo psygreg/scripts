@@ -15,8 +15,9 @@ if is_ubuntu || is_debian; then
     | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
     echo -e 'Types: deb\nURIs: https://download.vscodium.com/debs\nSuites: vscodium\nComponents: main\nArchitectures: amd64 arm64\nSigned-by: /usr/share/keyrings/vscodium-archive-keyring.gpg' \
     | sudo tee /etc/apt/sources.list.d/vscodium.sources
+    sudo apt update
     pkg_install codium
-elif is_fedora || is_ostree; then
+elif is_fedora || is_ostree || is_rhel; then
     sudo tee -a /etc/yum.repos.d/vscodium.repo << 'EOF'
 [gitlab.com_paulcarroty_vscodium_repo]
 name=gitlab.com_paulcarroty_vscodium_repo
@@ -47,5 +48,11 @@ else
     flatcodium="true"
 fi
 # patch for extensions
-{ [ -n "$flatcodium" ]; prep_create "$HOME/.var/app/com.vscodium.codium/config/VSCodium/product.json"; wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/product.json -O "$HOME/.var/app/com.vscodium.codium/config/VSCodium/product.json"; } || { prep_create "$HOME/.config/VSCodium/product.json"; wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/product.json -O "$HOME/.config/VSCodium/product.json"; }
+if [ -n "$flatcodium" ]; then
+    prep_create "$HOME/.var/app/com.vscodium.codium/config/VSCodium/product.json"
+    wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/product.json -O "$HOME/.var/app/com.vscodium.codium/config/VSCodium/product.json"
+else
+    prep_create "$HOME/.config/VSCodium/product.json"
+    wget https://raw.githubusercontent.com/psygreg/linuxtoys/master/resources/product.json -O "$HOME/.config/VSCodium/product.json"
+fi
 zeninf "$msg018"

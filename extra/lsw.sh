@@ -5,7 +5,9 @@
 # icon: lsw.svg
 # reboot: yes
 # nocontainer
+# compat: !ublue
 # repo: https://github.com/TibixDev/winboat
+# systemd: yes
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/helpers.lib"
@@ -17,29 +19,40 @@ docker_in () { # install docker
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
+        { [ -n "$UBUNTU_CODENAME" ] && UBUCODENAME="$UBUNTU_CODENAME"; }
+        { ([ "$VERSION_CODENAME" = "noble" ] || [ "$VERSION_CODENAME" = "resolute" ]) && UBUCODENAME="$VERSION_CODENAME"; }
         echo \
             "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-            $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+            $(. /etc/os-release && echo "${UBUCODENAME:-noble}") stable" | \
             sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
         sudo apt update
     elif is_debian; then
-        sudo apt install -y ca-certificates curl
+        { [ "$VERSION_CODENAME" != "trixie" ] && [ "$VERSION_CODENAME" != "bookworm" ]; } && DEB_CODENAME="trixie" || DEB_CODENAME="$VERSION_CODENAME"
+        sudo apt install -y ca-certificates # should not be declared as its removal may break the OS
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
-        echo \
-            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-            $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/debian
+Suites: $(. /etc/os-release && echo "${DEB_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
         sudo apt update
-    elif is_fedora; then
+    elif is_fedora || is_ostree || is_rhel; then
         if command -v rpm-ostree &> /dev/null; then
             if ! rpm-ostree status | grep -q "docker-ce"; then
                 fatal "$msg292"
             fi
         else
             sudo dnf -y install dnf-plugins-core
-            sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+            if is_rhel; then
+                sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+            else
+                sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+            fi
         fi
     fi
     if is_arch || is_cachy || is_suse || is_solus; then
@@ -83,8 +96,8 @@ get_winboat () { # gets latest release
             fi
         fi
         wget "https://github.com/TibixDev/winboat/releases/download/$tag/winboat-$ver-amd64.deb"
-        pkg_fromfile "./winboat-$ver-amd64.deb"
-    elif is_fedora || is_suse; then
+        pkg_fromfile "winboat-$ver-amd64.deb"
+    elif is_fedora || is_suse || is_rhel; then
         if rpm -qi "winboat" &> /dev/null; then
             local hostver="$(rpm -qi winboat | grep -i Version | awk '{print $3}')"
             if [ "$hostver" == "$ver" ]; then

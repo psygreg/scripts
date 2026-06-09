@@ -8,7 +8,7 @@
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-if is_debian || is_ubuntu || is_ostree || is_suse || is_solus; then
+if is_debian || is_ubuntu || is_ostree || is_suse || is_solus || is_rhel; then
     pkg_flat io.github.Faugus.faugus-launcher
     sudo_rq
     # apply overrides for Steam compatibility
@@ -22,3 +22,4 @@ elif is_fedora || is_arch || is_cachy; then
     fi
     pkg_install faugus-launcher
 fi
+zeninf "$finishmsg"

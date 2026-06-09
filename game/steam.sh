@@ -4,7 +4,7 @@
 # description: steam_desc
 # icon: steam.svg
 # repo: https://store.steampowered.com/
-# nocontainer: ubuntu, debian, suse, solus
+# nocontainer: ubuntu, debian, suse, solus, rhel
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/helpers.lib"
@@ -20,6 +20,8 @@ elif is_arch || is_cachy; then
 else
     # use flatpak for all others, since native install usually only works well on Fedora and Arch
     sudo_rq
+    { is_rhel && rpmfusion_chk; }
     pkg_flat com.valvesoftware.Steam
     pkg_install steam-devices
 fi
+zeninf "$finishmsg"

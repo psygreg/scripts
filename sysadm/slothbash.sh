@@ -3,7 +3,7 @@
 # description: sloth_desc
 # icon: sloth.svg
 # nocontainer
-# repo: https://git.linux.toys/psygreg/sloth-bash
+# repo: https://github.com/psygreg/sloth-bash
 
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 if [ -f "$HOME/.sloth-bash" ]; then
@@ -21,4 +21,5 @@ if [ -f "$HOME/.config/starship.toml" ]; then
 else
     prep_create "$HOME/.config/starship.toml"
 fi
-curl -fsSL https://raw.githubusercontent.com/psygreg/sloth-bash/main/install.sh | bash
+export $SCRIPT_DIR
+curl -fsSL https://raw.githubusercontent.com/psygreg/sloth-bash/main/install.sh | bash -s -- --from-app

@@ -7,6 +7,7 @@
 # reboot: ostree
 # noconfirm: yes
 # nocontainer
+# systemd: yes
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/optimizers.lib"
@@ -42,10 +43,6 @@ optimizer () {
         if ! rpm -qi "rpmfusion-nonfree-release" &>/dev/null; then
             sudo rpm-ostree install -yA https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
         fi
-        # install codecs and thumbnailer if absent
-        pkg_install libavcodec-freeworld gstreamer1-plugins-ugly ffmpegthumbnailer
-        # set up earlyoom
-        earlyoom_lib
         # enable signing of kernel modules (akmods) like Nvidia and VirtualBox
         if sudo mokutil --sb-state | grep -q "SecureBoot enabled"; then
             if ! rpm -qi "akmods-keys" &>/dev/null; then
@@ -63,50 +60,15 @@ optimizer () {
         if echo "$XDG_CURRENT_DESKTOP" | grep -qi 'gnome'; then
             sudo gsettings set org.gnome.mutter check-alive-timeout 20000
         fi
-        # filtered cachyos systemd configs
-        if [ "$ID" = "bluefin" ] || [ "$ID" = "bazzite" ] || [ "$ID" = "aurora" ]; then
-            wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/optimize-cfg-ublue/rpmbuild/RPMS/x86_64/optimize-cfg-ublue-1.0-1.x86_64.rpm
-            pkg_fromfile optimize-cfg-ublue-1.0-1.x86_64.rpm
-        else
-            wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/optimize-cfg-ostree/rpmbuild/RPMS/x86_64/linuxtoys-cfg-atom-1.1-1.x86_64.rpm
-            pkg_fromfile linuxtoys-cfg-atom-1.1-1.x86_64.rpm
-        fi
         # fix GTK app rendering for Intel BMG and Nvidia GPUs
         fix_intel_gtk
         # full kernel preemption for better latency
         preempt_lib
-        # set proton to run on wine-wayland mode by default
-        if ! is_nvidia; then
-            wayland_proton_lib
-        fi
         # save autopatch state
         touch "$HOME/.local/.autopatch.state"
     else
-        # update configs if already optimized
-        if [ "$ID" = "bluefin" ] || [ "$ID" = "bazzite" ] || [ "$ID" = "aurora" ]; then
-            cfg_host=$(rpm -qi "optimize-cfg-ublue" 2>/dev/null | grep "^Version" | awk '{print $3}')
-            cfg_server="1.0"
-        else
-            cfg_host=$(rpm -qi "linuxtoys-cfg-atom" 2>/dev/null | grep "^Version" | awk '{print $3}')
-            cfg_server="1.1"
-        fi
-        if [ "$cfg_host" != "$cfg_server" ]; then
-            if [ "$ID" = "bluefin" ] || [ "$ID" = "bazzite" ] || [ "$ID" = "aurora" ]; then
-                wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/optimize-cfg-ublue/rpmbuild/RPMS/x86_64/optimize-cfg-ublue-1.0-1.x86_64.rpm
-                if rpm -qi "optimize-cfg-ublue" &>/dev/null; then
-                    sudo rpm-ostree remove optimize-cfg-ublue
-                fi
-                pkg_fromfile optimize-cfg-ublue-1.0-1.x86_64.rpm
-            else
-                wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/optimize-cfg-ostree/rpmbuild/RPMS/x86_64/linuxtoys-cfg-atom-1.1-1.x86_64.rpm
-                if rpm -qi "linuxtoys-cfg-atom" &>/dev/null; then
-                    sudo rpm-ostree remove linuxtoys-cfg-atom
-                fi
-                pkg_fromfile linuxtoys-cfg-atom-1.1-1.x86_64.rpm
-            fi
-        else
-            zenity --info --text "$msg281" --height=300 --width=300
-        fi
+        zenwrn "$msg234"
+        exit 100
     fi
 }
 # end messagebox
@@ -123,10 +85,9 @@ while true; do
     CHOICE=$(zenity --list --title="Power Optimizer" \
         --column="$msg229" \
         "Install without Power Profile" \
-        "Desktop" \
-        "Laptop" \
+        "High Performance" \
         "$msg070" \
-        --height=360 --width=360)
+        --height=330 --width=360)
 
     if [ $? -ne 0 ]; then
         exit 100
@@ -134,8 +95,7 @@ while true; do
 
     case $CHOICE in
     "Install without Power Profile" ) sudo_rq && optimizer && end_msg && break ;;
-    "Desktop") sudo_rq && pp_ondemand && optimizer && end_msg && break ;;
-    "Laptop") sudo_rq && optimizer && psave_lib && end_msg && break ;;
+    "High Performance") sudo_rq && pp_ondemand && optimizer && end_msg && break ;;
     "$msg070") exit 100 ;;
     *) echo "Invalid Option" ;;
     esac

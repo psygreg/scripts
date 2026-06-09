@@ -3,8 +3,9 @@
 # version: 1.0
 # description: minfreefix_desc
 # icon: preload.svg
-# compat: ubuntu, debian, fedora, suse, arch, cachy, !solus
+# compat: ubuntu, debian, fedora, suse, arch, cachy, rhel
 # optimized-only: yes
+# systemd: yes
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/optimizers.lib"

@@ -6,10 +6,17 @@
 # nocontainer
 # repo: https://github.com/rfjakob/earlyoom
 # optimized-only: yes
+# compat: !solus, !fedora, !ostree, !ublue, !zorin
+# systemd: yes
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/optimizers.lib"
 _lang_
 sudo_rq
-earlyoom_lib
+if is_rhel; then
+    pkg_install systemd-oomd
+    sysd_enable systemd-oomd.service
+else
+    earlyoom_lib
+fi
 zeninf "$msg036"

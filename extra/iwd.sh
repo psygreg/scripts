@@ -5,8 +5,9 @@
 # icon: iwd.svg
 # reboot: yes
 # noconfirm: yes
-# compat
+# compat: !cachy, !rhel
 # nocontainer
+# systemd: yes
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
@@ -34,7 +35,7 @@ iwd_in () {
             # enforce iwd backend for networkmanager
             prep_create /etc/NetworkManager/conf.d/iwd.conf
             wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/iwd.conf
-            sudo mv iwd.conf /etc/NetworkManager/conf.d/
+            sudo cp -f iwd.conf /etc/NetworkManager/conf.d/
             sysd_disable wpa_supplicant
             sysd_enable iwd
             return 0
@@ -48,16 +49,16 @@ iwd_in () {
                 sysd_disable wpa_supplicant
                 sysd_stop wpa_supplicant
                 sysd_enable iwd
+                sysd_start iwd
             else
                 prep_create /etc/NetworkManager/conf.d/iwd.conf
                 wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/iwd.conf
-                sudo mv iwd.conf /etc/NetworkManager/conf.d/
+                sudo cp -f iwd.conf /etc/NetworkManager/conf.d/
                 # restart networkmanager with wpasupplicant disabled
                 sysd_disable wpa_supplicant
-                sysd_stop NetworkManager
-                sleep 1
                 sysd_enable iwd
-                sysd_start NetworkManager      
+                sysd_stop wpa_supplicant
+                sysd_start iwd
             fi
             return 0
         fi
@@ -66,4 +67,8 @@ iwd_in () {
         return 2
     fi
 }
-iwd_in
+if iwd_in; then
+    zeninf "$rebootmsg"
+else
+    fatal "iwd installation unsuccessful"
+fi

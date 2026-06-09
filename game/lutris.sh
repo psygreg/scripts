@@ -3,7 +3,7 @@
 # version: 1.0
 # description: lutris_desc
 # icon: lutris.svg
-# nocontainer: ubuntu, debian, suse
+# nocontainer: ubuntu, debian, suse, arch
 # repo: https://lutris.net
 
 # --- Start of the script code ---
@@ -13,11 +13,8 @@ if is_fedora || is_ostree; then
     sudo_rq
     rpmfusion_chk
     pkg_install lutris
-elif is_arch || is_cachy; then
-    sudo_rq
-    multilib_chk
-    pkg_install lutris
 else
-    # use flatpak for all others, since native install usually only works well on Fedora and Arch
+    # use flatpak for all others, since native install usually only works well on Fedora
     pkg_flat net.lutris.Lutris
 fi
+zeninf "$finishmsg"

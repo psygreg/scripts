@@ -3,12 +3,11 @@
 # version: 1.0
 # description: godotsharp_desc
 # icon: godotsh.svg
-# compat: fedora, ubuntu, debian, ostree, ublue, suse, arch, cachy
+# compat: fedora, ubuntu, debian, ostree, ublue, suse, arch, cachy, rhel
 # repo: https://godotengine.org
 
 # --- Start of the script code ---
 # when there are updates, make sure to edit the .desktop files in resources/godot as well!
-#SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 prep_tmp
@@ -23,11 +22,10 @@ GODOT_MONO_ZIP="Godot_latest_mono_linux.x86_64.zip"
 if [ ! -d "$HOME/.local/godot" ]; then
     wget "$GODOT_MONO_URL" -O "$GODOT_MONO_ZIP"
     prep_dir "$HOME/.local/godot"
-    unzip -d $HOME/godot "$GODOT_MONO_ZIP"
-    copy_ -rf godot "$HOME/.local/"
-    wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/main/resources/godot/godot.png
+    unzip -d "$HOME/.local/godot" "$GODOT_MONO_ZIP"
+    wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/godot/godot.png
     copy_ godot.png "$HOME/.local/godot"
-    wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/main/resources/godot/godotsharp.desktop
+    wget https://raw.githubusercontent.com/psygreg/linuxtoys/refs/heads/master/resources/godot/godotsharp.desktop
     prep_create "$HOME/.local/share/applications/godotsharp.desktop"
     copy_ godotsharp.desktop "$HOME/.local/share/applications"
     sudo_rq
@@ -49,9 +47,7 @@ if [ ! -d "$HOME/.local/godot" ]; then
     fi
 else # update
     wget "$GODOT_MONO_URL" -O "$GODOT_MONO_ZIP"
-    mkdir -p godot
-    unzip -d godot "$GODOT_MONO_ZIP"
-    prep_dir "$HOME/.local/godot"
-    copy_ -rf godot "$HOME/.local/"
+    prep_dir_edit "$HOME/.local/godot"
+    unzip -d "$HOME/.local/godot" "$GODOT_MONO_ZIP"
 fi
 zeninf "$msg018"

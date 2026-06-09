@@ -3,8 +3,9 @@
 # version: 1.0
 # description: tailscale_desc
 # icon: tailscale.png
-# compat: ubuntu, debian, fedora, arch, cachy, suse, solus
+# compat: ubuntu, debian, fedora, arch, cachy, suse, solus, rhel
 # revert: solus
+# systemd: yes
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/helpers.lib"

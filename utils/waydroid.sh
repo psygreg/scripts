@@ -3,10 +3,11 @@
 # version: 1.0
 # description: waydroid_desc
 # icon: waydroid.svg
-# compat: fedora, solus, ostree, debian, ubuntu, arch, cachy, ublue
+# compat: fedora, solus, ostree, debian, ubuntu, arch, cachy, ublue, rhel
 # nocontainer
 # gpu: Amd, Intel
 # repo: https://waydro.id/
+# systemd: yes
 
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/helpers.lib"
@@ -20,9 +21,15 @@ if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
         pkg_install python3-venv
     fi
     pkg_install waydroid python3
+    if command -v rpm-ostree &> /dev/null; then
+        if rpm-ostree status | grep -q "State: staged"; then
+            zenwrn "${msgostreepending}:-A system update is pending. Please reboot your system and run this script again to complete the installation."
+            exit 100
+        fi
+    fi
     sysd_enable waydroid-container
     sysd_start waydroid-container
-    waydroid init -c https://ota.waydro.id/system -v https://ota.waydro.id/vendor -s GAPPS
+    sudo waydroid init -c https://ota.waydro.id/system -v https://ota.waydro.id/vendor -s GAPPS
     if command -v firewall-cmd &> /dev/null; then # fedora rules for waydroid networking
         sudo firewall-cmd --zone=trusted --add-interface=waydroid0 --permanent
     elif command -v ufw &> /dev/null; then # other systems with ufw

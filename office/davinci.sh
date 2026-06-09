@@ -3,7 +3,6 @@
 # version: 1.0
 # description: davinci_desc
 # icon: resolve.svg
-# compat: !zorin
 
 # functions
 #create JSON, user agent and download Resolve
@@ -92,30 +91,22 @@ davincinatd () {
         fi
     fi
     if is_debian || is_ubuntu; then
-        fetch_from_mirror "autoresolvedeb.sh" \
-            "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolvedeb.sh" \
-            "https://git.linux.toys/psygreg/autoresolvedeb/raw/branch/main/linuxtoys/autoresolvedeb.sh"
+        curl -L -o autoresolvedeb.sh "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolvedeb.sh"
         chmod +x autoresolvedeb.sh
         ./autoresolvedeb.sh
         rm autoresolvedeb.sh
     elif is_arch || is_cachy; then
-        fetch_from_mirror "autoresolvepkg.sh" \
-            "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolvepkg.sh" \
-            "https://git.linux.toys/psygreg/autoresolvedeb/raw/branch/main/linuxtoys/autoresolvepkg.sh"
+        curl -L -o autoresolvepkg.sh "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolvepkg.sh"
         chmod +x autoresolvepkg.sh
         ./autoresolvepkg.sh
         rm autoresolvepkg.sh
     elif is_fedora; then
-        fetch_from_mirror "autoresolverpm.sh" \
-            "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolverpm.sh" \
-            "https://git.linux.toys/psygreg/autoresolvedeb/raw/branch/main/linuxtoys/autoresolverpm.sh"
+        curl -L -o autoresolverpm.sh "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolverpm.sh"
         chmod +x autoresolverpm.sh
         ./autoresolverpm.sh
         rm autoresolverpm.sh
     elif is_suse; then
-        fetch_from_mirror "autoresolverpm.sh" \
-            "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolverpm.sh" \
-            "https://git.linux.toys/psygreg/autoresolvedeb/raw/branch/main/linuxtoys/autoresolverpm.sh"
+        curl -L -o autoresolverpm.sh "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autoresolverpm.sh"
         chmod +x autoresolverpm.sh
         ./autoresolverpm.sh
         rm autoresolverpm.sh
@@ -123,9 +114,7 @@ davincinatd () {
 }
 
 davinciboxd () {
-    fetch_from_mirror "autodavincibox.sh" \
-        "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autodavincibox.sh" \
-        "https://git.linux.toys/psygreg/autoresolvedeb/raw/branch/main/linuxtoys/autodavincibox.sh"
+    curl -L -o autodavincibox.sh "https://raw.githubusercontent.com/psygreg/autoresolvedeb/main/linuxtoys/autodavincibox.sh"
     chmod +x autodavincibox.sh
     ./autodavincibox.sh
     rm autodavincibox.sh
@@ -136,12 +125,10 @@ davinciboxatom () {
     dv_atom_deps () {
         pkg_install toolbox podman lshw
         if is_nvidia; then
-            pkg_install nvidia-container-toolkit
-        fi
-        sudo_rq
-        _install_
-        if [[ $? -eq 1 ]]; then
-            echo "No packages to install."
+            pkg_install curl
+			curl -s -L -k https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
+  				sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+            pkg_install nvidia-container-toolkit nvidia-container-toolkit-base libnvidia-container-tools libnvidia-container1
         fi
     }
 
@@ -167,6 +154,9 @@ davinciboxatom () {
             # stop to ensure usermod takes effect before usage of the software
             distrobox stop davincibox
         fi
+        cd $HOME
+        sudo rm -rf davincibox #cleanup
+        zeninf "$finishmsg"
     }
 
 	while true; do
@@ -194,13 +184,16 @@ davinciboxatom () {
 	done
 }
 # if on atomic distros, go straight to davincibox
-source "$SCRIPT_DIR/libs/linuxtoys.lib"
+source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
 # warn about just installing Resolve, and still requiring a purchase from BMD to use Studio
 zenwrn "$msg034"
-prep_tmp
+cd $HOME
+export SCRIPT_DIR
 if command -v rpm-ostree >/dev/null 2>&1; then
     davinciboxatom
+elif is_solus || is_rhel; then
+    davinciboxd
 else
     # menu
     while true; do
