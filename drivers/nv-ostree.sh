@@ -24,8 +24,7 @@ if sudo mokutil --sb-state | grep -q "SecureBoot enabled"; then
         git clone https://github.com/CheariX/silverblue-akmods-keys
         cd silverblue-akmods-keys
         sudo bash setup.sh
-        pkg_fromfile akmods-keys-0.0.2-8.fc$(rpm -E %fedora).noarch.rpm
-        zenwrn "$msgostreepending" && exit 0
+        pkg_fromfile --ostreecheck akmods-keys-0.0.2-8.fc$(rpm -E %fedora).noarch.rpm
     fi
 fi
 pkg_install akmod-nvidia xorg-x11-drv-nvidia-cuda

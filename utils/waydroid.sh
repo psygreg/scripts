@@ -20,8 +20,7 @@ if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
         sleep 1
         pkg_install python3-venv
     fi
-    pkg_install waydroid python3
-    { is_ostree && rpm-ostree status --json | grep -q '"state":"staged"' && zenwrn "$msgostreepending" && exit 100; } || true
+    pkg_install --ostreecheck waydroid python3
     sysd_enable waydroid-container
     sysd_start waydroid-container
     sudo waydroid init -c https://ota.waydro.id/system -v https://ota.waydro.id/vendor -s GAPPS

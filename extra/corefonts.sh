@@ -10,8 +10,7 @@ source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 sudo_rq
 if [ ! -d "$HOME/.local/share/fonts/mscorefonts" ]; then
-    pkg_install cabextract
-    { is_ostree && rpm-ostree status --json | grep -q '"state":"staged"' && zenwrn "$msgostreepending" && exit 100; } || true
+    pkg_install --ostreecheck cabextract
     # get corefonts
     _sfpath="http://downloads.sourceforge.net/corefonts"
     fonts=($_sfpath/andale32.exe $_sfpath/arial32.exe $_sfpath/arialb32.exe $_sfpath/comic32.exe $_sfpath/courie32.exe $_sfpath/georgi32.exe

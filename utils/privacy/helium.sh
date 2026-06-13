@@ -2,7 +2,7 @@
 # name: Helium Browser
 # version: 1.0
 # description: helium_desc
-# icon: helium.svg
+# icon: helium.png
 # repo: https://helium.computer
 
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
