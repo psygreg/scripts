@@ -8,17 +8,27 @@
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/helpers.lib"
 _lang_
-pkg_flat org.openrgb.OpenRGB
+
+fetch_openrgb_rules() {
+    local REPO ASSET TAG URL
+    REPO="CalcProgrammer1/OpenRGB"
+    ASSET="60-openrgb.rules"
+    TAG=$(curl -sL "https://api.github.com/repos/${REPO}/releases/latest" \
+      | grep -Po '"tag_name":\s*"\K[^"]+')
+    URL="https://github.com/${REPO}/releases/download/${TAG}/${ASSET}"
+    wget "$URL"
+}
+
+pkg_fromrelease https://github.com/CalcProgrammer1/OpenRGB
 if is_fedora || is_ostree || is_rhel; then
-    sudo_rq
+    askpass
     rpmfusion_chk
     pkg_install openrgb-udev-rules
 else
-    prep_tmp
-    wget https://openrgb.org/releases/release_0.9/60-openrgb.rules
-    sudo_rq
+    fetch_openrgb_rules
+    askpass
     prep_create /usr/lib/udev/rules.d/60-openrgb.rules
     copy_ -f 60-openrgb.rules /usr/lib/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
 fi
-zeninf "$msg036"
+info "$msg036"
