@@ -27,10 +27,10 @@ elif is_ubuntu; then
     pkg_install nvidia-driver-580
     secureboot_check
 elif is_suse; then
-    case "$VERSION_ID" in
-        *Tumbleweed* | *Slowroll*) REPO_URL="https://download.nvidia.com/opensuse/tumbleweed" ;;
-        15.*|16|16.* ) REPO_URL="https://download.nvidia.com/opensuse/leap/$VERSION_ID" ;;
-        *) fatal "Unsupported OpenSUSE version." ;;
+    case "$ID" in
+        opensuse-tumbleweed|opensuse-slowroll) REPO_URL="https://download.nvidia.com/opensuse/tumbleweed" ;;
+        opensuse-leap) REPO_URL='https://download.nvidia.com/opensuse/leap/$releasever' ;;
+        *) die "Unsupported OpenSUSE variant: $ID" ;;
     esac
     sudo_rq
     if ! zypper lr | grep -q "^nvidia\s"; then
