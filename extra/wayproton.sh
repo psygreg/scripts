@@ -4,6 +4,7 @@
 # description: wayproton_desc
 # icon: proton.svg
 # gpu: intel, amd
+# wayland: yes
 
 # --- Start of the script code ---
 askpass
