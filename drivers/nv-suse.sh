@@ -13,7 +13,7 @@ source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 case "$VERSION_ID" in
     *Tumbleweed* | *Slowroll*) REPO_URL="https://download.nvidia.com/opensuse/tumbleweed" ;;
-    15.*) REPO_URL="https://download.nvidia.com/opensuse/leap/$VERSION_ID" ;;
+    15.*|16|16.* ) REPO_URL="https://download.nvidia.com/opensuse/leap/$VERSION_ID" ;;
     *) fatal "Unsupported OpenSUSE version." ;;
 esac
 sudo_rq
