@@ -39,7 +39,7 @@ if is_debian; then
     wget "https://developer.download.nvidia.com/compute/cuda/repos/debian$debian_ver/x86_64/cuda-keyring_1.1-1_all.deb"
     pkg_fromfile cuda-keyring_1.1-1_all.deb
     sudo apt update
-    pkg_install nvidia-open
+    pkg_install nvidia-open cuda-toolkit
     initramfs_upd
     bootloader_upd
 elif is_ubuntu; then 
