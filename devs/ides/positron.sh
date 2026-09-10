@@ -11,7 +11,7 @@ _lang_
 _tag=$(curl -s "https://api.github.com/repos/posit-dev/positron/releases/latest" | grep -oP '"tag_name": "\K(.*)(?=")')
 [ -z ${_tag} ] && { fatal "It was not possible to obtain the latest available version of positron."; exit 1;}
 
-if is_debian; then
+if is_debian || is_ubuntu; then
 	_link="https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${_tag}-x64.deb"
     _pkg_name=$(basename ${_link})
     if curl -fsSL "${_link}" -o "/tmp/${_pkg_name}"; then
