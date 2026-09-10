@@ -9,11 +9,18 @@
 # --- Start of the script code ---
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
-zenwrn "$msg294"
-askpass
+warn "$msg294"
 
+askpass
 pkg_install base-devel
-git clone --branch paru-bin --single-branch https://github.com/archlinux/aur.git /tmp/paru-bin
-cd /tmp/paru-bin && makepkg -s && {
-	pkg_fromfile /tmp/paru-bin/paru-bin-*.tar.zst && { zeninf "$msg018"; };
-} || { fatal "$msg077"; }
+
+prep_tmp_noram
+builddir=$(mktemp -d ./paru-bin.XXXXXX) || die "Failed to create builddir"
+git clone --branch paru-bin --single-branch https://github.com/archlinux/aur.git "$builddir" || die "Failed to clone paru"
+cd "$builddir" || die "Failed to reach builddir"
+
+makepkg -s --noconfirm || die "Failed to build package paru"
+pkg_fromfile "$builddir"/paru-bin-*.tar.zst || die "Failed to install package paru"
+
+{ command -v paru >/dev/null 2>&1 && paru --version >/dev/null 2>&1; } || die "paru installed but not operational"
+info "$finishmsg"
