@@ -3,7 +3,7 @@
 # version: 1.0
 # description: grubtrfs_desc
 # icon: grubtrfs.svg
-# compat: ubuntu, debian, arch, fedora, suse, !deepin
+# compat: ubuntu, debian, arch, fedora, suse, !deepin, !cachy
 # nocontainer
 # repo: https://github.com/Antynea/grub-btrfs
 # systemd: yes
@@ -15,31 +15,20 @@ _lang_
 # check dependencies
 dep_check () {
     grub_found=false
-    if [[ "$ID_LIKE" =~ (ubuntu|debian) ]] || [ "$ID" == "debian" ]; then
-        if dpkg -l | grep -qE 'grub-efi|grub-pc'; then
-            grub_found=true
-        fi
-    elif [[ "$ID_LIKE" =~ (rhel|fedora) ]] || [ "$ID" = "fedora" ]; then
-        if command -v grub2-mkconfig &>/dev/null; then
-            grub_found=true
-        fi
-    elif [[ "$ID_LIKE" == *suse* ]]; then
-        if rpm -qa | grep -qE 'grub2-efi|grub2-pc'; then
-            grub_found=true
-        fi
-    elif [[ "$ID" =~ ^(arch|cachyos)$ ]] || \
-         [[ "$ID_LIKE" == *arch* ]] || \
-         [[ "$ID_LIKE" == *archlinux* ]]; then
-        if pacman -Qi grub &>/dev/null; then
-            grub_found=true
-        fi
+    if is_fedora || is_rhel; then
+        command -v grub2-mkconfig &>/dev/null && grub_found=true
+    elif is_suse; then
+        command -v grub2-mkconfig &>/dev/null && grub_found=true
+    elif is_arch || is_cachy; then
+        command -v grub-mkconfig &>/dev/null && grub_found=true
+    elif is_ubuntu || is_debian; then
+        command -v update-grub &>/dev/null && grub_found=true
     fi
-    if [ "$grub_found" = false ]; then
-        die "No GRUB found."
-    fi
+    [ "$grub_found" = true ] || die "No GRUB found."
+
     if is_fedora || is_suse; then
         pkg_install gawk inotify-tools make
-    elif is_arch; then
+    elif is_arch || is_cachy; then
         pkg_install gawk inotify-tools
     elif is_ubuntu || is_debian; then
         pkg_install gawk inotify-tools make
