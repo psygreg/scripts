@@ -8,5 +8,6 @@
 source "$SCRIPT_DIR/libs/linuxtoys.lib"
 _lang_
 pkg_flat com.rcloneui.RcloneUI
+flatpak override --user --filesystem=host --talk-name=org.freedesktop.Flatpak com.rcloneui.RcloneUI
 zeninf "$msg018"
 
